@@ -1,4 +1,4 @@
-# NanoBanana Skills
+# Auto Viral Article Writer
 
 AI article writing pipeline for agents: hot topics → viral patterns → article drafting → illustrations → cover image.
 
