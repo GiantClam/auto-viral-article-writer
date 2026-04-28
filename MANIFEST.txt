@@ -11,6 +11,7 @@ tools/article_illustrate.py
 tools/config_loader.py
 tools/jina_reader.py
 tools/viral_kb.py
+tools/opencli_fetcher.py
 config/.env.example
 config/EXTEND.md
 scripts/example_workflow.py

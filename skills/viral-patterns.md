@@ -15,7 +15,7 @@ ViralKB storage:
 data/viralkb/
 ```
 
-Uses SQLite-compatible pattern storage (patterns.jsonl + embeddings.npy).
+Format: patterns.jsonl (JSONL, one pattern per line) + embeddings.npy (optional, for semantic search).
 
 ### Step 2 — Search ViralKB
 
@@ -23,13 +23,20 @@ Search by keyword for title patterns, structure patterns, emotional triggers:
 
 ```python
 import json
+from pathlib import Path
 
-# Search patterns.jsonl
-with open(r'data/viralkb/patterns.jsonl', 'r', encoding='utf-8') as f:
+patterns_file = Path('data/viralkb/patterns.jsonl')
+keyword_lower = keyword.lower()
+
+matches = []
+with open(patterns_file, 'r', encoding='utf-8') as f:
     for line in f:
         pattern = json.loads(line)
-        if keyword.lower() in pattern.get('keyword', '').lower():
-            # yield pattern
+        if keyword_lower in pattern.get('keyword', '').lower():
+            matches.append(pattern)
+
+# Sort by engagement score
+matches.sort(key=lambda x: x.get('engagement', 0), reverse=True)
 ```
 
 ### Step 3 — Analyze Title Formulas
@@ -59,4 +66,21 @@ Anxiety, doubling, halving, truth, expose, must-see
 
 ## Tools
 
-Direct Python JSON reading, no external dependencies.
+Direct Python JSON reading — no external dependencies.
+
+## Optional Enhancement: opencli_fetcher.py
+
+For fresh social media data to compare against ViralKB patterns:
+
+```bash
+# Requires: opencli CLI + Chrome extension
+python tools/opencli_fetcher.py --platform xiaohongshu --query "AI" --limit 5
+python tools/opencli_fetcher.py --platform zhihu --query "AI工具" --limit 5
+```
+
+This gives you real-time viral content to validate or supplement ViralKB findings.
+
+## Notes
+
+- If `data/viralkb/patterns.jsonl` does not exist, run `viral-mining` skill first to populate
+- No API keys required for ViralKB lookup (local file-based)

@@ -113,7 +113,8 @@ skill-packaging/
 │   ├── article_illustrate.py    ← Auto-illustrate: analyze → generate → insert
 │   ├── config_loader.py        ← Load .env, validate API keys
 │   ├── jina_reader.py          ← URL → markdown (research)
-│   └── viral_kb.py             ← ViralKB interface (patterns.jsonl + embeddings)
+│   ├── viral_kb.py             ← ViralKB interface (patterns.jsonl + embeddings)
+│   └── opencli_fetcher.py      ← Social media fetcher: Xiaohongshu/Zhihu/Bilibili/Twitter/Reddit
 ├── config/
 │   ├── .env.example             ← API key template
 │   └── EXTEND.md                ← baoyu-imagine default settings
@@ -173,6 +174,29 @@ from viral_kb import ViralKB
 kb = ViralKB()
 results = kb.search("Claude Code", limit=10)
 ```
+
+### opencli_fetcher.py (Social Media Fetcher)
+
+Requires `opencli` CLI + Chrome extension. Fetches real-time viral content from Xiaohongshu, Zhihu, Bilibili, Twitter, Reddit, HN.
+
+```bash
+# Check if opencli is available
+opencli --version
+
+# Xiaohongshu viral feed
+python tools/opencli_fetcher.py --platform xiaohongshu --limit 10
+
+# Zhihu hot search
+python tools/opencli_fetcher.py --platform zhihu --query "AI工具" --limit 10
+
+# Bilibili hot
+python tools/opencli_fetcher.py --platform bilibili --limit 10
+
+# Reddit hot posts
+python tools/opencli_fetcher.py --platform reddit --limit 10
+```
+
+Requirements: Chrome browser with OpenCLI Browser Bridge extension installed and enabled.
 
 ---
 

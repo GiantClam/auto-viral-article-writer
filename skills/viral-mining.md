@@ -4,15 +4,66 @@
 `挖掘爆款`, `viral mining`, `发现爆款`, `爆款挖掘`
 
 ## Input
-- keyword: Topic keyword
-- sources: RSS URL list (default sources provided)
+- keyword: Topic keyword to search across platforms
+- sources: Platform list (default: xiaohongshu, zhihu, reddit, bilibili, twitter, hackernews)
 
 ## Workflow
 
-### Step 1 — Parallel Multi-Source Fetch
+### Step 1 — Check opencli Availability
 
-Built-in default sources:
+```bash
+opencli --version
+opencli doctor
+```
+
+If opencli is installed with Chrome + extension active, use Step 2.
+Otherwise, fall back to Step 3.
+
+### Step 2 — Multi-Platform Search via opencli
+
+Use `tools/opencli_fetcher.py` to search viral content by keyword across platforms:
+
+```bash
+# Search each platform for the keyword
+python tools/opencli_fetcher.py --platform xiaohongshu --query "AI" --limit 20
+python tools/opencli_fetcher.py --platform zhihu --query "AI工具" --limit 20
+python tools/opencli_fetcher.py --platform bilibili --query "AI" --limit 20
+python tools/opencli_fetcher.py --platform reddit --query "AI" --limit 20
+```
+
+Parse JSON output, extract viral articles:
 ```python
+import json
+from pathlib import Path
+
+def collect_viral(keyword, platforms, limit=20):
+    results = []
+    for platform in platforms:
+        output_file = f'/tmp/{platform}_viral.json'
+        subprocess.run([
+            'python', 'tools/opencli_fetcher.py',
+            '--platform', platform,
+            '--query', keyword,
+            '--limit', str(limit),
+            '--output', output_file
+        ], capture_output=True)
+
+        if Path(output_file).exists():
+            with open(output_file) as f:
+                data = json.load(f)
+                for item in data.get('items', []):
+                    item['platform'] = platform
+                    results.append(item)
+    return results
+```
+
+### Step 3 — Fallback: RSS (no opencli)
+
+If opencli is not available:
+
+```python
+import requests
+
 SOURCES = {
     'HN': 'https://news.ycombinator.com/rss',
     'Reddit-ML': 'https://www.reddit.com/r/MachineLearning/.rss',
@@ -21,60 +72,73 @@ SOURCES = {
 }
 ```
 
-Use `requests` + `feedparser` in parallel (avoid PowerShell curl alias).
+### Step 4 — Signal Calculation
 
-### Step 2 — Content Parsing & Signal Calculation
+Calculate engagement score per item:
 
-Signal strength per item:
 ```python
-score = votes * 1.0 + comments * 0.5 + recency_bonus
+def calc_score(item, platform):
+    if platform == 'xiaohongshu':
+        return int(item.get('liked_count', 0))
+    elif platform == 'zhihu':
+        return int(item.get('vote_count', 0))
+    elif platform == 'reddit':
+        return int(item.get('score', 0))
+    elif platform == 'bilibili':
+        return int(item.get('view', 0))
+    else:
+        return 0
 ```
 
-Higher recency_bonus for newer content.
+### Step 5 — Category Tagging
 
-### Step 3 — Category Tagging
-
-5 categories:
+Tag each item with one of 5 categories:
 1. OpenClaw ecosystem
 2. Model updates
 3. AI applications
 4. Algorithm breakthroughs
 5. AI global expansion
 
-### Step 4 — Ingest to ViralKB
+### Step 6 — Ingest to ViralKB
 
 ```python
-# Append to patterns.jsonl
-with open(r'data/viralkb/patterns.jsonl', 'a', encoding='utf-8') as f:
+import json
+from pathlib import Path
+
+kb_dir = Path('data/viralkb')
+kb_dir.mkdir(parents=True, exist_ok=True)
+patterns_file = kb_dir / 'patterns.jsonl'
+
+with open(patterns_file, 'a', encoding='utf-8') as f:
     f.write(json.dumps({
         'keyword': keyword,
-        'title': title,
-        'title_pattern': pattern,
-        'structure': structure,
-        'emotional_triggers': triggers,
+        'title': item.get('title', 'N/A'),
+        'title_pattern': analyze_title_pattern(item['title']),
+        'structure': 'Pain point → Data → Solution → CTA',
+        'emotional_triggers': extract_emotions(item['title']),
         'engagement': score,
-        'source': source
+        'source': platform
     }, ensure_ascii=False) + '\n')
 ```
 
-### Step 5 — Output Trending List
-
-Sorted by signal strength, top 20:
+### Step 7 — Output Trending List
 
 ```
 ## Trending Viral Content
 
 ### [AI应用] Claude Code New Features
-▲ 1234 | Summary: ... | Source: HN | Link: ...
+▲ 1234 likes | Summary: ... | Source: 小红书 | Link: ...
 ...
 ```
 
-## Tools
+## Tool: opencli_fetcher.py
 
-Python `requests` + `feedparser` (optional).
+Requirements:
+- `opencli` CLI installed
+- Chrome browser with target site logged in
+- OpenCLI Browser Bridge extension enabled
 
 ## Notes
 
-- Do NOT use `subprocess.run(['curl', ...])` — Windows PowerShell intercepts it
-- Use `requests.get()` directly for HTTP requests
-- Supports custom sources parameter to override defaults
+- **opencli is the primary source** — provides rich engagement data from Chinese platforms
+- Windows PowerShell: opencli works fine, `nanobanana_client.py` needs `--use-curl` only
