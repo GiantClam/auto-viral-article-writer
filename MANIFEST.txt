@@ -1,0 +1,16 @@
+skills/index.md
+skills/hot-topics.md
+skills/viral-patterns.md
+skills/viral-mining.md
+skills/write-article.md
+skills/cover-image.md
+skills/article-illustrate.md
+skills/image-generation.md
+tools/nanobanana_client.py
+tools/article_illustrate.py
+tools/config_loader.py
+tools/jina_reader.py
+tools/viral_kb.py
+config/.env.example
+config/EXTEND.md
+scripts/example_workflow.py
