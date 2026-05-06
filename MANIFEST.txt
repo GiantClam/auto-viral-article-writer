@@ -14,7 +14,11 @@ tools/config_loader.py
 tools/jina_reader.py
 tools/viral_kb.py
 tools/opencli_fetcher.py
+tools/hot_topics_viral_ingest.py
 config/.env.example
+config/EXTEND.md
+config/user_preferences.json.example
+scripts/example_workflow.py
 config/EXTEND.md
 config/user_preferences.json.example
 scripts/example_workflow.py

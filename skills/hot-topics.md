@@ -146,7 +146,45 @@ Tag each item with one of 5 categories:
 4. **算法突破 / Algorithm Breakthroughs** — Research progress
 5. **AI出海 / AI Global Expansion** — Chinese AI products going global
 
-### Step 6 — Output Format
+### Step 6 — Auto Ingest to ViralKB (就地筛选入库)
+
+After output, qualifying items are **automatically ingested** into ViralKB using the on-site scoring approach — no re-running of full multi-platform searches needed.
+
+```python
+import json
+from pathlib import Path
+from tools.hot_topics_viral_ingest import ingest_hot_topics
+
+# Save hot-topics results to a temp JSON file
+hot_results = Path('data/hot_topics/latest.json')
+kb_dir = Path('data/viral_kb')
+
+# Ingest items with score >= 50 (default threshold)
+result = ingest_hot_topics(
+    source_files=[str(hot_results)],
+    kb_dir=str(kb_dir),
+    min_score=50,
+)
+
+print(f"Total: {result['total']}, Ingested: {result['ingested']}, "
+      f"Skipped (low score): {result['skipped_low_score']}, "
+      f"Skipped (duplicate): {result['skipped_duplicates']}")
+```
+
+**Ingestion rules (就地筛选入库):**
+- Items with `score >= min_score` (default: 50) are ingested
+- `title_formula` extracted from title pattern (数字清单/how-to/揭秘型/提问式/对比型/情绪冲击/合集型)
+- `emotional_triggers` auto-detected from keyword list
+- `opening_hook` auto-generated
+- `topic_tags` auto-categorized (AI工具/模型更新/AI应用/算法突破/AI出海)
+- URL deduplication against existing ViralKB patterns
+
+**Result stats:**
+- `ingested` — new patterns written to ViralKB
+- `skipped_low_score` — items below score threshold
+- `skipped_duplicates` — URLs already in ViralKB
+
+### Step 7 — Output Format
 
 ```
 ## 今日热榜 [AI工具, SaaS, AI出海]
@@ -165,6 +203,8 @@ Tag each item with one of 5 categories:
 ### Hacker News
 1. **[标题]** ▲ 871 points
    链接
+
+> 自动入库: 本次热榜中 N 篇高热度内容已入库 ViralKB（积分>=50）
 ```
 
 ## Data Sources Summary

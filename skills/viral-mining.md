@@ -162,3 +162,4 @@ Requirements:
 - Results are merged, deduplicated, sorted by engagement score
 - For Reddit/HN, both opencli AND RSS are queried separately for maximum coverage
 - Windows PowerShell: `--use-curl` only needed for `nanobanana_client.py`
+- **Automatic ingestion from hot-topics**: The `hot-topics` skill automatically ingests qualifying items (score >= 50) into ViralKB after each fetch — see `hot-topics.md` Step 6 for details. This means ViralKB is continuously populated even when opencli social media channels are offline, as long as RSS feeds return results.
