@@ -6,6 +6,7 @@ skills/write-article.md
 skills/cover-image.md
 skills/article-illustrate.md
 skills/image-generation.md
+skills/baoyu-imagine.md
 skills/setup.md
 tools/nanobanana_client.py
 tools/article_illustrate.py

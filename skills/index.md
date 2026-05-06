@@ -13,6 +13,7 @@ All skills are located in the `skills/` directory and trigger on specific keywor
 | **cover-image** | 生成封面, create cover, 文章封面, cover image | YouTube thumbnail style personal brand cover |
 | **article-illustrate** | 生成插图, 文章配图, insert images, illustrate article | Auto-analyze + insert illustrations via Images API |
 | **image-generation** | 生成图片, create image, generate image, AI画图, draw | OpenAI/Gemini/OpenAI-compatible image generation |
+| **baoyu-imagine** | baoyu-imagine, 生成图片, create image, generate image | Compatibility alias for image-generation |
 
 ## Skill Orchestration
 

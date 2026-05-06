@@ -101,6 +101,7 @@ If this succeeds, the tool chain is working.
 | **cover-image** | 生成封面, cover image | YouTube thumbnail cover (needs `--ref` photo) |
 | **article-illustrate** | 生成插图, 文章配图 | Auto-generates + inserts illustrations |
 | **image-generation** | 生成图片, create image | Direct image generation |
+| **baoyu-imagine** | baoyu-imagine, 生成图片 | Compatibility alias for image-generation |
 
 ### Pipeline Flow
 
@@ -127,7 +128,8 @@ skill-packaging/
 │   ├── write-article.md      ← Full article pipeline
 │   ├── cover-image.md        ← YouTube thumbnail cover generator
 │   ├── article-illustrate.md ← Auto-illustration for articles
-│   └── image-generation.md   ← Direct image generation
+│   ├── image-generation.md   ← Direct image generation
+│   └── baoyu-imagine.md      ← Compatibility alias for image-generation
 ├── tools/
 │   ├── nanobanana_client.py    ← Image gen: OpenAI/Gemini/OpenAI-compatible CLI
 │   ├── article_illustrate.py   ← Auto-illustrate: analyze → generate → insert
