@@ -43,10 +43,10 @@ warm color grading, clean composition. No watermark. No signature.
 ### Step 4 — Call nanobanana_client
 
 ```bash
-python tools/nanobanana_client.py --gemini-image --use-curl \
+python tools/nanobanana_client.py --openai-compatible-image \
   --ref "./your-photo.jpg" \
   --prompt "YouTube thumbnail cover. Person on right (40-45% frame), half-body, amber rim light. Warm orange-to-amber gradient. Left area clean for text overlay. No watermark." \
-  --aspect-ratio 16:9 \
+  --image-size 1536x1024 \
   --output "output/images/wechat/{slug}-cover-final.png"
 ```
 
@@ -79,7 +79,7 @@ Output path: `output/images/wechat/{slug}-cover-final.png`
 
 ```yaml
 # Cover image preferences
-preferred_image_backend: baoyu-imagine
+preferred_image_backend: openai-compatible
 quick_mode: true
 default_aspect: 16:9
 language: zh
@@ -89,4 +89,4 @@ watermark:
 
 ## Tools
 
-`tools/nanobanana_client.py` — Always use `--gemini-image --use-curl`
+`tools/nanobanana_client.py` — Supports OpenAI official, Gemini official, and OpenAI-compatible image APIs

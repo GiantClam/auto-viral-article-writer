@@ -101,6 +101,116 @@ def generate_with_gemini_image(
         return False
 
 
+def generate_with_openai_images(
+    api_key,
+    prompt,
+    model="gpt-image-2",
+    output_path="output.png",
+    verbose=False,
+    base_url="https://api.openai.com",
+    size="1024x1024",
+    quality="high",
+    background="opaque",
+    output_format="png",
+    moderation="auto",
+    n=1,
+    ref_images=None,
+    mask_path=None,
+):
+    """Generate image using OpenAI Images-compatible API."""
+
+    if verbose:
+        print("Generating with OpenAI-compatible Images API...")
+        print(f"  Model: {model}")
+        print(f"  Prompt: {prompt[:80]}...")
+        print(f"  Size: {size}, Quality: {quality}")
+
+    import os as _os
+    for _k in ["http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY"]:
+        _os.environ.pop(_k, None)
+
+    import requests as _req
+
+    try:
+        if ref_images:
+            url = f"{base_url.rstrip('/')}/v1/images/edits"
+            headers = {"Authorization": f"Bearer {api_key}"}
+            data = {
+                "model": model,
+                "prompt": prompt,
+                "size": size,
+                "quality": quality,
+                "background": background,
+                "output_format": output_format,
+                "moderation": moderation,
+            }
+            files = {"image": open(ref_images[0], "rb")}
+            if mask_path:
+                files["mask"] = open(mask_path, "rb")
+            try:
+                resp = _req.post(url, headers=headers, data=data, files=files, timeout=180, proxies={"http": None, "https": None})
+            finally:
+                for f in files.values():
+                    f.close()
+        else:
+            url = f"{base_url.rstrip('/')}/v1/images/generations"
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}",
+            }
+            payload = {
+                "model": model,
+                "prompt": prompt,
+                "size": size,
+                "quality": quality,
+                "background": background,
+                "output_format": output_format,
+                "moderation": moderation,
+                "n": n,
+            }
+            resp = _req.post(url, headers=headers, json=payload, timeout=180, proxies={"http": None, "https": None})
+        resp.raise_for_status()
+        response = resp.json()
+
+        if "error" in response:
+            print(f"API error: {response['error']}")
+            return False
+
+        # Extract image data (base64 or url)
+        image_data = None
+        if "data" in response and len(response["data"]) > 0:
+            item = response["data"][0]
+            if "b64_json" in item:
+                image_data = base64.b64decode(item["b64_json"])
+            elif "url" in item:
+                # Download from URL
+                img_resp = _req.get(item["url"], timeout=60, proxies={"http": None, "https": None})
+                img_resp.raise_for_status()
+                image_data = img_resp.content
+
+        if not image_data:
+            print("No image data found in response")
+            return False
+
+        output_path = Path(output_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(output_path, "wb") as f:
+            f.write(image_data)
+
+        print(f"Image saved: {output_path}")
+        if verbose:
+            print(f"  Size: {len(image_data) / 1024:.2f} KB")
+        return True
+
+    except _req.exceptions.Timeout:
+        print("Request timed out")
+        return False
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return False
+
+
 def generate_with_curl(
     api_key, prompt, model, output_path, verbose=False, base_url=None, ref_images=None
 ):
@@ -357,28 +467,34 @@ def batch_generate(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Google Gemini / Imagen Image Generator",
+        description="Image Generator for OpenAI, Gemini, and OpenAI-compatible APIs",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Generate with Gemini Image (NanoBanana 2 - gemini-3.1-flash-image-preview)
-  python3 nanobanana_client.py --prompt "A cute cat" --gemini-image --output cat.png
+  # Generate with an OpenAI-compatible Images API
+  python3 nanobanana_client.py --openai-compatible-image --prompt "A cute cat" --output cat.png
+
+  # Generate with official OpenAI Images API
+  python3 nanobanana_client.py --openai-image --prompt "A cute cat" --output cat.png
+
+  # Generate with official Gemini Image API
+  python3 nanobanana_client.py --gemini-image --prompt "A cute cat" --output cat.png
 
   # Human portrait cover (universal template):
   # Replace {MAIN_TITLE}, {SUBTITLE}, {TOPIC_TAGS} before use
   python3 nanobanana_client.py \\
     --prompt "WeChat article cover: right side has a [AGE]-year-old [ETHNICITY] professional, [GENDER], wearing [STYLE], slightly turned, warm orange glow on silhouette, gesturing toward left. Left area reserved for title: main title '[MAIN_TITLE]' in large bold Chinese font, subtitle '[SUBTITLE]' below. Background: subtle data/task visualization elements (curves, nodes, tags) in cool cyan. Color palette: warm orange + cream gradient, navy blue, amber accent. Style: realistic photography + light concept compositing, professional tech media feel, 16:9 horizontal. Bottom-right: small watermark space. Negative: no cyberpunk neon, no cartoon, no oversaturation." \\
-    --gemini-image --ref ./photo.jpg --output cover.png
+    --openai-compatible-image --ref ./photo.jpg --output cover.png
 
-  # Batch generate with Gemini Image
-  python3 nanobanana_client.py --prompts-file prompts.txt --batch --gemini-image --output images/
+  # Batch generate
+  python3 nanobanana_client.py --prompts-file prompts.txt --batch --openai-compatible-image --output images/
 
   # Batch generate with multiple prompts (comma-separated)
-  python3 nanobanana_client.py --prompts "AI conference, token economics, neural networks" --batch --gemini-image --output images/
+  python3 nanobanana_client.py --prompts "AI conference, token economics, neural networks" --batch --openai-compatible-image --output images/
 """,
     )
 
-    parser.add_argument("--api-key", help="Google AI API Key (or use .env)")
+    parser.add_argument("--api-key", help="API key (or use config/.env)")
     parser.add_argument("--prompt", help="Single image prompt")
     parser.add_argument("--prompts", help="Multiple prompts (comma-separated)")
     parser.add_argument(
@@ -446,6 +562,43 @@ Examples:
         "--ref", "-r", nargs="+", default=None,
         help="Reference image paths for img2img (optional, pass your own photo)"
     )
+    parser.add_argument(
+        "--openai-image",
+        action="store_true",
+        help="Use official OpenAI Images API",
+    )
+    parser.add_argument(
+        "--openai-compatible-image",
+        action="store_true",
+        help="Use OpenAI-compatible Images API",
+    )
+    parser.add_argument(
+        "--image-model",
+        default="gpt-image-2",
+        help="Images API model (default: gpt-image-2)",
+    )
+    parser.add_argument(
+        "--image-size",
+        default="1024x1024",
+        help="Image size for Images API (default: 1024x1024)",
+    )
+    parser.add_argument(
+        "--image-quality",
+        default="high",
+        choices=["low", "medium", "high", "auto"],
+        help="Image quality for Images API (default: high)",
+    )
+    parser.add_argument(
+        "--image-format",
+        default="png",
+        choices=["png", "jpeg", "webp"],
+        help="Output format for Images API (default: png)",
+    )
+    parser.add_argument(
+        "--mask",
+        default=None,
+        help="Mask image path for inpainting edits (optional)",
+    )
 
     args = parser.parse_args()
 
@@ -473,20 +626,33 @@ Examples:
     # Load API key
     api_key = args.api_key
     base_url = None
+    config = load_config()
+    openai_compatible_config = config.get("openai_compatible", {})
+    use_openai_compatible = args.openai_compatible_image or bool(openai_compatible_config.get("api_key"))
+    use_openai_official = args.openai_image or (not use_openai_compatible and bool(config.get("openai_api_key")))
+    if use_openai_compatible:
+        if args.image_size == "1024x1024" and openai_compatible_config.get("default_size"):
+            args.image_size = openai_compatible_config["default_size"]
+        if args.image_quality == "high" and openai_compatible_config.get("default_quality"):
+            args.image_quality = openai_compatible_config["default_quality"]
+
     if not api_key:
-        config = load_config()
         if not validate_config(config, verbose=args.verbose):
             sys.exit(1)
-        # Prefer aiberm for image generation
-        api_key = config.get("aiberm_api_key") or config.get("google_ai_api_key")
-        if config.get("aiberm_api_key"):
-            base_url = "https://aiberm.com/v1beta/models"
+        if use_openai_compatible:
+            api_key = openai_compatible_config.get("api_key")
+            base_url = openai_compatible_config.get("base_url")
+        elif use_openai_official:
+            api_key = config.get("openai_api_key")
+            base_url = config.get("openai_base_url", "https://api.openai.com")
+        else:
+            api_key = config.get("google_ai_api_key")
         if args.verbose:
-            print("Loaded API key from environment")
+            print("Loaded API key from config")
 
     if not api_key:
         print("Error: No API key provided")
-        print("Use --api-key or configure GOOGLE_AI_API_KEY in config/.env")
+        print("Use --api-key or configure GOOGLE_AI_API_KEY, OPENAI_API_KEY, or OPENAI_COMPATIBLE_API_KEY in config/.env")
         sys.exit(1)
 
     # Execute
@@ -523,6 +689,19 @@ Examples:
                         str(output_path),
                         args.verbose,
                     )
+                elif use_openai_compatible or use_openai_official:
+                    success = generate_with_openai_images(
+                        api_key,
+                        prompt.strip(),
+                        args.image_model,
+                        str(output_path),
+                        args.verbose,
+                        base_url or "https://api.openai.com",
+                        args.image_size,
+                        args.image_quality,
+                        ref_images=args.ref,
+                        mask_path=args.mask,
+                    )
                 elif args.gemini_image:
                     success = generate_with_gemini_image(
                         api_key,
@@ -557,6 +736,20 @@ Examples:
                 args.aspect_ratio,
                 args.output,
                 verbose=args.verbose,
+            )
+        elif use_openai_compatible or use_openai_official:
+            generate_with_openai_images(
+                api_key,
+                args.prompt,
+                args.image_model,
+                args.output,
+                verbose=args.verbose,
+                base_url=base_url or "https://api.openai.com",
+                size=args.image_size,
+                quality=args.image_quality,
+                output_format=args.image_format,
+                ref_images=args.ref,
+                mask_path=args.mask,
             )
         elif args.gemini_image:
             generate_with_gemini_image(

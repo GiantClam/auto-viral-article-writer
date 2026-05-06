@@ -1,46 +1,64 @@
-# image-generation — AI Image Generation (baoyu-imagine compatible)
+# image-generation — AI Image Generation
 
 ## Triggers
 `生成图片`, `create image`, `generate image`, `AI画图`, `draw`
 
 ## Input
 - `--prompt`: Image description (required)
-- `--ref`: Reference image path(s), multiple supported (optional)
-- `--aspect-ratio`: 16:9 / 1:1 / 4:3 / 3:4 / 9:16 (default: 16:9)
-- `--quality`: normal / 2k (default: 2k)
-- `--gemini-image-model`: Gemini model (default: gemini-3.1-flash-image-preview)
+- `--ref`: Reference image path(s), optional for OpenAI-compatible edits or Gemini refs
+- `--mask`: Optional mask image for OpenAI-compatible inpainting edits
+- `--openai-image`: Use official OpenAI Images API
+- `--openai-compatible-image`: Use an OpenAI-compatible Images API
+- `--image-model`: Images API model (default: `gpt-image-2`)
+- `--image-size`: `1024x1024`, `1536x1024`, `1024x1536`, or `auto`
+- `--image-quality`: `low` / `medium` / `high` / `auto`
+- `--image-format`: `png` / `jpeg` / `webp`
+- `--gemini-image`: Use Google Gemini official image generation
+- `--gemini-image-model`: Gemini model (default: `gemini-3.1-flash-image-preview`)
 - `--output`: Output file path (required)
-- `--use-curl`: Force requests mode (required on Windows PowerShell)
-- `-v`: Verbose output
 
 ## Workflow
 
 ### Step 1 — Validate Inputs
 
-Reference image is optional; if provided, verify file exists:
-```python
-import os
-if ref_path and not os.path.exists(ref_path):
-    raise FileNotFoundError(f'Reference image not found: {ref_path}')
-```
+Reference and mask files are optional; if provided, verify they exist.
 
 ### Step 2 — Build Command
 
-Always use `--gemini-image --use-curl` on Windows PowerShell:
+OpenAI-compatible Images API:
 
 ```bash
-python tools/nanobanana_client.py --gemini-image --use-curl \
+python tools/nanobanana_client.py --openai-compatible-image \
+  --prompt "Your image description" \
+  --image-size 1536x1024 \
+  --output "output/images/xxx.png"
+```
+
+Official OpenAI Images API:
+
+```bash
+python tools/nanobanana_client.py --openai-image \
+  --prompt "Your image description" \
+  --image-size 1536x1024 \
+  --output "output/images/xxx.png"
+```
+
+Google Gemini official API:
+
+```bash
+python tools/nanobanana_client.py --gemini-image \
   --prompt "Your image description" \
   --output "output/images/xxx.png"
 ```
 
-With reference photo:
+Reference image edit with OpenAI-compatible API:
+
 ```bash
-python tools/nanobanana_client.py --gemini-image --use-curl \
-  --ref "./your-photo.jpg" \
-  --prompt "Photorealistic portrait, warm tones..." \
-  --aspect-ratio 16:9 \
-  --output "output/images/portrait.png"
+python tools/nanobanana_client.py --openai-compatible-image \
+  --ref "./source.png" \
+  --prompt "Keep the subject and composition, restyle as a clean tech poster" \
+  --image-size 1536x1024 \
+  --output "output/images/edit.png"
 ```
 
 ### Step 3 — Execute and Parse Output
@@ -51,18 +69,11 @@ Run via subprocess, parse stdout for `Image saved:` line.
 
 | Provider | Env Variable |
 |----------|-------------|
-| **aiberm (default)** | `AIBERM_API_KEY` |
-| **Google Gemini** | `GOOGLE_AI_API_KEY` |
-| OpenAI | `OPENAI_API_KEY` |
-| Azure | `AZURE_OPENAI_API_KEY` |
-| OpenRouter | `OPENROUTER_API_KEY` |
-| DashScope | `DASHSCOPE_API_KEY` |
-| MiniMax | `MINIMAX_API_KEY` |
-| Replicate | `REPLICATE_API_TOKEN` |
-| Jimeng | `JIMENG_ACCESS_KEY_ID`, `JIMENG_SECRET_ACCESS_KEY` |
-| Seedream | `ARK_API_KEY` |
+| OpenAI-compatible Images API | `OPENAI_COMPATIBLE_API_KEY`, `OPENAI_COMPATIBLE_BASE_URL` |
+| OpenAI official Images API | `OPENAI_API_KEY`, optional `OPENAI_BASE_URL` |
+| Google Gemini official API | `GOOGLE_AI_API_KEY` |
 
-Default priority: aiberm > Google Gemini > OpenAI
+Default priority: OpenAI-compatible > OpenAI official > Gemini official.
 
 ## Output Format
 
@@ -73,7 +84,7 @@ Size: X KB
 
 ## Notes
 
-- **Windows PowerShell**: `curl` is an alias for `Invoke-WebRequest` — always use `--use-curl` flag
-- Reference image is converted to base64 and passed via `inlineData` to Gemini
-- Without `--ref`, no reference photo is used (pure AI generation)
-- Default output directory: `output/images/`
+- Do not hardcode provider-specific API keys or intermediary platform names in skills or committed config.
+- OpenAI-compatible APIs use `/v1/images/generations` and `/v1/images/edits`.
+- `--ref` with OpenAI-compatible API uses multipart `/v1/images/edits`.
+- If `background=transparent`, use `png` or `webp`, not `jpeg`.

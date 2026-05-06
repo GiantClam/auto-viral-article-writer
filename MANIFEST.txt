@@ -6,6 +6,7 @@ skills/write-article.md
 skills/cover-image.md
 skills/article-illustrate.md
 skills/image-generation.md
+skills/setup.md
 tools/nanobanana_client.py
 tools/article_illustrate.py
 tools/config_loader.py
@@ -14,4 +15,5 @@ tools/viral_kb.py
 tools/opencli_fetcher.py
 config/.env.example
 config/EXTEND.md
+config/user_preferences.json.example
 scripts/example_workflow.py

@@ -84,7 +84,8 @@ def main():
     print("=" * 50)
 
     config = load_config()
-    has_key = config.get('google_ai_api_key') or config.get('aiberm_api_key')
+    compatible = config.get('openai_compatible', {})
+    has_key = config.get('google_ai_api_key') or config.get('openai_api_key') or compatible.get('api_key')
     print(f"API key configured: {'Yes' if has_key else 'No (run: cp config/.env.example config/.env)'}")
 
     example_hot_topics()

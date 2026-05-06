@@ -201,54 +201,66 @@ def generate_image(
     aspect: str = "16:9",
     quality: str = "2k",
 ) -> bool:
-    """通过 Aiberm/Gemini API 生成图像"""
+    """通过 OpenAI Images-compatible API 生成图像"""
     try:
         import requests
 
-        api_key = os.getenv("AIBERM_API_KEY") or os.getenv("GOOGLE_AI_API_KEY")
+        config = load_config()
+        compatible_config = config.get("openai_compatible", {})
+        api_key = os.getenv("OPENAI_COMPATIBLE_API_KEY") or compatible_config.get("api_key") or config.get("openai_api_key")
         if not api_key:
-            print("Error: AIBERM_API_KEY / GOOGLE_AI_API_KEY not set")
+            print("Error: OPENAI_COMPATIBLE_API_KEY or OPENAI_API_KEY not set")
             return False
 
-        base_url = "https://aiberm.com/v1beta/models"
-        model = "gemini-3.1-flash-image-preview"
+        base_url = compatible_config.get("base_url") or config.get("openai_base_url", "https://api.openai.com")
+        model = "gpt-image-2"
 
         size_map = {
-            "16:9": ("1024", "576"),
-            "1:1": ("1024", "1024"),
-            "4:3": ("1024", "768"),
-            "9:16": ("576", "1024"),
+            "16:9": "1536x1024",
+            "1:1": "1024x1024",
+            "4:3": "1536x1024",
+            "3:4": "1024x1536",
+            "9:16": "1024x1536",
         }
-        image_size_map = {"normal": "1K", "2k": "2K"}
-        image_size = image_size_map.get(quality, "2K")
+        size = size_map.get(aspect, compatible_config.get("default_size", "1536x1024"))
+        api_quality = compatible_config.get("default_quality", "high")
 
         resp = requests.post(
-            f"{base_url}/{model}:generateContent",
+            f"{base_url.rstrip('/')}/v1/images/generations",
             headers={
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
             },
             json={
-                "contents": [{"parts": [{"text": f"Generate an image of: {prompt}"}]}],
-                "generationConfig": {
-                    "responseModalities": ["TEXT", "IMAGE"],
-                    "imageSize": image_size,
-                },
+                "model": model,
+                "prompt": prompt,
+                "size": size,
+                "quality": api_quality,
+                "background": "opaque",
+                "output_format": "png",
+                "moderation": "auto",
+                "n": 1,
             },
             timeout=180,
         )
         resp.raise_for_status()
         data = resp.json()
 
-        for candidate in data.get("candidates", []):
-            for part in candidate.get("content", {}).get("parts", []):
-                if "inlineData" in part:
-                    b64 = part["inlineData"]["data"]
-                    img_bytes = base64.b64decode(b64)
-                    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-                    with open(output_path, "wb") as f:
-                        f.write(img_bytes)
-                    return True
+        img_bytes = None
+        if data.get("data"):
+            item = data["data"][0]
+            if item.get("b64_json"):
+                img_bytes = base64.b64decode(item["b64_json"])
+            elif item.get("url"):
+                img_resp = requests.get(item["url"], timeout=60)
+                img_resp.raise_for_status()
+                img_bytes = img_resp.content
+
+        if img_bytes:
+            Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+            with open(output_path, "wb") as f:
+                f.write(img_bytes)
+            return True
 
         print(f"No image in response for: {output_path}")
         return False

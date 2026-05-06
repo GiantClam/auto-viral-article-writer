@@ -2,19 +2,33 @@
 
 AI article writing pipeline for agents: hot topics → viral patterns → article drafting → illustrations → cover image.
 
-For: Codex, Claude Code, OpenCode, OpenClaw, Hermes.
+**Supported Platforms:** OpenCode, Codex, Claude Code, OpenClaw, Hermes
 
 ---
 
-## Setup (Agent Instructions)
+## First-Time Setup
 
-### Step 1 — Install Dependencies
+### Step 1 — Run Setup Wizard
+
+After installing, say "配置" or "setup" to start the setup wizard:
+
+```bash
+python scripts/setup.py
+```
+
+This will:
+1. Prompt you to select hot topic directions (AI工具, SaaS, AI出海, etc.)
+2. Choose which platforms to monitor (小红书, 知乎, B站, Twitter)
+3. Verify opencli connection
+4. Test all skills
+
+### Step 2 — Install Dependencies
 
 ```bash
 pip install python-dotenv requests feedparser numpy
 ```
 
-### Step 2 — Configure API Keys
+### Step 3 — Configure API Keys
 
 ```bash
 cp config/.env.example config/.env
@@ -24,31 +38,29 @@ Edit `config/.env`, fill in at least one key:
 
 ```bash
 # Image generation (required for cover + illustrations)
-AIBERM_API_KEY=your_aiberm_key_here        # Recommended (faster, reference image support)
+OPENAI_COMPATIBLE_API_KEY=your_key_here
+OPENAI_COMPATIBLE_BASE_URL=https://your-openai-compatible-base-url
 # OR
-GOOGLE_AI_API_KEY=your_google_key_here      # Fallback
+OPENAI_API_KEY=your_openai_key_here
+# OR
+GOOGLE_AI_API_KEY=your_google_key_here
 
 # Content research
 JINA_API_KEY=your_jina_key_here            # Optional but recommended
 ```
 
-**aiberm vs Google:**
-- aiberm supports reference images (`--ref`) → use for cover image with personal photo
-- Google Gemini does not support reference images
-- Both work for article illustrations
-
 Get keys:
-- aiberm: https://aiberm.com (registration required)
+- OpenAI: https://platform.openai.com/api-keys
 - Google AI Studio: https://aistudio.google.com
 - Jina Reader: https://jina.ai/reader (free tier available)
 
-### Step 3 — Create Output Directories
+### Step 4 — Create Output Directories
 
 ```bash
 mkdir -p output/wechat output/images/wechat data/viralkb
 ```
 
-### Step 4 — Verify Installation
+### Step 5 — Verify Installation
 
 ```bash
 python tools/config_loader.py
@@ -56,13 +68,19 @@ python tools/config_loader.py
 
 Should print "Configuration valid!" if keys are configured.
 
+Or check opencli connection:
+
+```bash
+python tools/opencli_fetcher.py --check
+```
+
 ---
 
 ## Quick Test
 
 ```bash
-# Test image generation (requires AIBERM_API_KEY or GOOGLE_AI_API_KEY)
-python tools/nanobanana_client.py --gemini-image --use-curl \
+# Test image generation (requires OpenAI-compatible, OpenAI, or Gemini credentials)
+python tools/nanobanana_client.py --openai-compatible-image \
   --prompt "A warm orange gradient background" \
   --output output/images/test.png
 ```
@@ -75,20 +93,21 @@ If this succeeds, the tool chain is working.
 
 | Skill | Triggers | What It Does |
 |-------|----------|--------------|
-| **hot-topics** | 今日热榜, AI热榜, 热门话题 | Collects AI trending from HN, Reddit, RSS |
+| **setup** | 配置, setup, 设置 | First-time setup wizard, configure hot topics, verify dependencies |
+| **hot-topics** | 今日热榜, AI热榜, 热门话题 | Collects trending from HN, Reddit, 小红书, 知乎, B站, Twitter |
 | **viral-patterns** | 爆款模式, 查找爆款, 找标题公式 | Searches ViralKB for viral patterns |
 | **viral-mining** | 挖掘爆款, viral mining | Discovers viral content → ViralKB |
 | **write-article** | 写文章, 生成文章, 公众号 | Full pipeline: research → draft → illustrate |
 | **cover-image** | 生成封面, cover image | YouTube thumbnail cover (needs `--ref` photo) |
 | **article-illustrate** | 生成插图, 文章配图 | Auto-generates + inserts illustrations |
-| **image-generation** | 生成图片, create image | Direct image generation (baoyu-imagine) |
+| **image-generation** | 生成图片, create image | Direct image generation |
 
 ### Pipeline Flow
 
 ```
-hot-topics → viral-patterns → write-article → cover-image
-                      ↓
-               article-illustrate (插图自动插入正文)
+setup (first time) → hot-topics → viral-patterns → write-article → cover-image
+                              ↓
+                       article-illustrate (插图自动插入正文)
 ```
 
 ---
@@ -100,27 +119,49 @@ skill-packaging/
 ├── README.md
 ├── MANIFEST.txt
 ├── skills/
-│   ├── index.md              ← Skill directory (load this first)
-│   ├── hot-topics.md
-│   ├── viral-patterns.md
-│   ├── viral-mining.md
-│   ├── write-article.md
-│   ├── cover-image.md
-│   ├── article-illustrate.md
-│   └── image-generation.md
+│   ├── index.md              ← Skill directory overview
+│   ├── setup.md              ← First-time setup wizard
+│   ├── hot-topics.md         ← Trending topic collector (reads user_preferences.json)
+│   ├── viral-patterns.md     ← ViralKB pattern lookup
+│   ├── viral-mining.md       ← Viral content discovery → ViralKB
+│   ├── write-article.md      ← Full article pipeline
+│   ├── cover-image.md        ← YouTube thumbnail cover generator
+│   ├── article-illustrate.md ← Auto-illustration for articles
+│   └── image-generation.md   ← Direct image generation
 ├── tools/
-│   ├── nanobanana_client.py    ← Image gen: baoyu-imagine CLI (--gemini-image --use-curl)
-│   ├── article_illustrate.py    ← Auto-illustrate: analyze → generate → insert
+│   ├── nanobanana_client.py    ← Image gen: OpenAI/Gemini/OpenAI-compatible CLI
+│   ├── article_illustrate.py   ← Auto-illustrate: analyze → generate → insert
 │   ├── config_loader.py        ← Load .env, validate API keys
 │   ├── jina_reader.py          ← URL → markdown (research)
 │   ├── viral_kb.py             ← ViralKB interface (patterns.jsonl + embeddings)
-│   └── opencli_fetcher.py      ← Social media fetcher: Xiaohongshu/Zhihu/Bilibili/Twitter/Reddit
+│   └── opencli_fetcher.py      ← Social media fetcher (--check to verify connection)
 ├── config/
 │   ├── .env.example             ← API key template
-│   └── EXTEND.md                ← baoyu-imagine default settings
-└── scripts/
-    └── example_workflow.py      ← Demo of the full pipeline
+│   ├── EXTEND.md                ← Image generation default settings
+│   └── user_preferences.json.example  ← User preferences template
+├── scripts/
+│   ├── setup.py               ← Interactive first-time setup wizard
+│   └── example_workflow.py     ← Demo of the full pipeline
+└── data/
+    └── viralkb/                ← ViralKB storage (created on first run)
 ```
+
+---
+
+## User Preferences
+
+After running setup, your preferences are saved to `config/user_preferences.json`:
+
+```json
+{
+  "hot_topics": ["AI工具", "SaaS", "AI出海"],
+  "default_platforms": ["xiaohongshu", "zhihu", "bilibili", "twitter"],
+  "output_dir": "output",
+  "opencli_configured": true
+}
+```
+
+hot-topics skill reads these preferences to filter content by your selected topics.
 
 ---
 
@@ -129,26 +170,27 @@ skill-packaging/
 ### nanobanana_client.py (Image Generation)
 
 ```bash
-# Windows PowerShell: ALWAYS use --gemini-image --use-curl
-python tools/nanobanana_client.py --gemini-image --use-curl \
+# OpenAI-compatible Images API
+python tools/nanobanana_client.py --openai-compatible-image \
   --prompt "Your image description" \
   --output "output/images/xxx.png"
 
-# With reference photo (aiberm only, --ref is your photo path)
-python tools/nanobanana_client.py --gemini-image --use-curl \
+# With reference photo via OpenAI-compatible edits API
+python tools/nanobanana_client.py --openai-compatible-image \
   --ref "./your-photo.jpg" \
   --prompt "Professional portrait, warm tones" \
   --output "output/images/portrait.png"
 ```
 
 Key args:
-- `--gemini-image` — Required flag
-- `--use-curl` — Required on Windows (avoids PowerShell curl alias)
+- `--openai-compatible-image` — Use OpenAI-compatible Images API
+- `--openai-image` — Use official OpenAI Images API
+- `--gemini-image` — Use official Gemini image generation
 - `--prompt` — Image description
-- `--ref` — Your reference photo path (optional, aiberm supports it)
+- `--ref` — Reference photo path for supported providers
 - `--output` — Output file path
-- `--aspect-ratio` — 16:9 / 1:1 / 4:3 / 3:4 / 9:16
-- `--quality` — normal / 2k (default: 2k)
+- `--image-size` — 1024x1024 / 1536x1024 / 1024x1536 / auto
+- `--image-quality` — low / medium / high / auto
 
 ### article_illustrate.py (Auto-Illustrate)
 
@@ -177,23 +219,29 @@ results = kb.search("Claude Code", limit=10)
 
 ### opencli_fetcher.py (Social Media Fetcher)
 
-Requires `opencli` CLI + Chrome extension. Fetches real-time viral content from Xiaohongshu, Zhihu, Bilibili, Twitter, Reddit, HN.
+Requires `opencli` CLI + Chrome extension. Fetches real-time viral content.
 
 ```bash
 # Check if opencli is available
-opencli --version
+python tools/opencli_fetcher.py --check
 
 # Xiaohongshu viral feed
 python tools/opencli_fetcher.py --platform xiaohongshu --limit 10
 
 # Zhihu hot search
-python tools/opencli_fetcher.py --platform zhihu --query "AI工具" --limit 10
+python tools/opencli_fetcher.py --platform zhihu --limit 10
 
 # Bilibili hot
 python tools/opencli_fetcher.py --platform bilibili --limit 10
 
+# Twitter trending
+python tools/opencli_fetcher.py --platform twitter --limit 10
+
 # Reddit hot posts
 python tools/opencli_fetcher.py --platform reddit --limit 10
+
+# HackerNews
+python tools/opencli_fetcher.py --platform hackernews --limit 10
 ```
 
 Requirements: Chrome browser with OpenCLI Browser Bridge extension installed and enabled.
@@ -202,19 +250,37 @@ Requirements: Chrome browser with OpenCLI Browser Bridge extension installed and
 
 ## Skills Detail
 
+### setup
+
+First-time setup wizard that:
+1. Prompts user to select hot topic directions (3-5 from: AI工具, 科技, 编程, 商业, AI出海, 效率工具, AI创业, 全部)
+2. Chooses default platforms (小红书, 知乎, B站, Twitter)
+3. Verifies opencli connection
+4. Tests core functionality
+5. Saves preferences to `config/user_preferences.json`
+
 ### hot-topics
 
-Collects AI trending from: HN, Reddit (r/MachineLearning, r/artificial, r/singularity), RSS feeds.
+Collects AI trending from:
+- **opencli**: 小红书, 知乎, B站, Twitter (requires Chrome + extension)
+- **RSS**: HN, Reddit (r/MachineLearning, r/artificial, r/singularity)
 
-5 categories: OpenClaw ecosystem, model updates, AI applications, algorithm breakthroughs, AI global expansion.
+Reads `config/user_preferences.json` to filter by user's selected hot_topics.
+
+5 categories: AI工具, 模型更新, AI应用, 算法突破, AI出海.
 
 Output:
 ```
-## [AI应用] Claude Code new features
-- Signal: ▲ 1234
-- Summary: 1-2 sentence description
-- Link: URL
-- Source: HN
+## 今日热榜 [AI工具, SaaS, AI出海]
+
+### 小红书
+1. **[标题]** ▲ 1234 likes
+
+### 知乎
+1. **[标题]** 热度: 4183万 | 回答: 150
+
+### Twitter/X
+1. **#话题** 分类
 ```
 
 ### viral-patterns
@@ -227,12 +293,12 @@ Run `viral-mining` skill first to populate ViralKB.
 
 Parallel RSS/HN crawler → discovers viral content → ingests into ViralKB.
 
-Signal score: `votes + comments * 0.5 + recency_bonus`
+Signal score calculated from engagement metrics.
 
 ### write-article
 
 Full pipeline:
-1. hot-topics research
+1. hot-topics research (reads user preferences)
 2. viral-patterns lookup
 3. Jina Reader data collection
 4. Gemini outline (5 title candidates + `**bold sections**`)
@@ -291,9 +357,9 @@ Use when you need a specific image outside the article workflow.
 
 The correct pattern is:
 ```bash
-python tools/nanobanana_client.py --gemini-image --use-curl ...
+python tools/nanobanana_client.py --openai-compatible-image ...
 ```
-(`--use-curl` flag tells the tool to use Python requests, not subprocess)
+The tool uses Python requests internally for OpenAI-compatible and OpenAI image calls.
 
 ---
 
@@ -303,14 +369,17 @@ python tools/nanobanana_client.py --gemini-image --use-curl ...
 
 Edit `config/.env` and add at least one key:
 ```bash
-AIBERM_API_KEY=your_key_here
+OPENAI_COMPATIBLE_API_KEY=your_key_here
+OPENAI_COMPATIBLE_BASE_URL=https://your-openai-compatible-base-url
+# OR
+OPENAI_API_KEY=your_key_here
 # OR
 GOOGLE_AI_API_KEY=your_key_here
 ```
 
 ### "curl: command not found" or curl acts weird
 
-Always use `--use-curl` flag: `python tools/nanobanana_client.py --gemini-image --use-curl ...`
+Prefer OpenAI-compatible or OpenAI image calls, which use Python requests directly. If using Gemini from Windows PowerShell, pass `--use-curl` to force the requests path.
 
 ### "Reference image not found"
 
@@ -324,12 +393,27 @@ Run `viral-mining` skill first to populate `data/viralkb/patterns.jsonl`.
 
 Check that your article has `**bold section headings**` after the `---` divider. The tool only processes post-divider content.
 
+### opencli returns "No results found"
+
+1. Ensure Chrome browser is running with target site logged in
+2. Check OpenCLI Browser Bridge extension is installed and enabled
+3. Run `opencli doctor` to verify connection
+4. Run `python tools/opencli_fetcher.py --check` for detailed diagnostics
+
+### First-time setup not prompted
+
+Say "配置" or "setup" or "设置" to start the setup wizard manually:
+```bash
+python scripts/setup.py
+```
+
 ---
 
 ## Agent Usage Pattern
 
-1. Load `skills/index.md` — see available skills
-2. Identify skill by trigger word
-3. Load that skill file — follow workflow steps
-4. Execute using tools in `tools/` directory
-5. All paths are relative to skill-packaging root
+1. Say "配置" to run first-time setup (or "配置" to update preferences)
+2. Load `skills/index.md` — see available skills
+3. Identify skill by trigger word
+4. Load that skill file — follow workflow steps
+5. Execute using tools in `tools/` directory
+6. All paths are relative to skill-packaging root

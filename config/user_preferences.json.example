@@ -1,0 +1,9 @@
+{
+  "hot_topics": [],
+  "default_platforms": ["xiaohongshu", "zhihu", "bilibili", "twitter"],
+  "output_dir": "output",
+  "created_at": null,
+  "updated_at": null,
+  "opencli_configured": false,
+  "preferred_language": "zh"
+}

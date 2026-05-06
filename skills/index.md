@@ -11,8 +11,8 @@ All skills are located in the `skills/` directory and trigger on specific keywor
 | **viral-mining** | 挖掘爆款, viral mining, 发现爆款, 爆款挖掘 | Multi-source discovery + ViralKB ingestion |
 | **write-article** | 写文章, 生成文章, create-article, 写篇, 公众号, 小红书 | Full pipeline: research → outline → draft → illustrate |
 | **cover-image** | 生成封面, create cover, 文章封面, cover image | YouTube thumbnail style personal brand cover |
-| **article-illustrate** | 生成插图, 文章配图, insert images, illustrate article | Auto-analyze + insert illustrations (baoyu-imagine via direct requests) |
-| **image-generation** | 生成图片, create image, generate image, AI画图, draw | baoyu-imagine compatible multi-provider image gen |
+| **article-illustrate** | 生成插图, 文章配图, insert images, illustrate article | Auto-analyze + insert illustrations via Images API |
+| **image-generation** | 生成图片, create image, generate image, AI画图, draw | OpenAI/Gemini/OpenAI-compatible image generation |
 
 ## Skill Orchestration
 
@@ -21,29 +21,26 @@ user: I want to write a WeChat article about Claude Code
 
 → hot-topics: Research latest Claude Code trends
 → viral-patterns: Look up Claude-related viral title patterns
-→ write-article: Generate full article (with illustrations via baoyu-imagine)
-→ cover-image: Generate cover image via baoyu-imagine
+→ write-article: Generate full article (with illustrations via image-generation)
+→ cover-image: Generate cover image via image-generation
 ```
 
 ## Core Tools
 
-- `tools/nanobanana_client.py` — Image generation CLI (supports `--ref` reference photo, multi-provider: aiberm/Gemini/OpenAI/etc.)
-- `tools/article_illustrate.py` — Auto-illustration for markdown articles (calls baoyu-imagine internally)
+- `tools/nanobanana_client.py` — Image generation CLI (OpenAI official, Gemini official, OpenAI-compatible)
+- `tools/article_illustrate.py` — Auto-illustration for markdown articles (uses Images API internally)
 - `tools/viral_kb.py` — ViralKB database interface
 - `tools/jina_reader.py` — URL → markdown fetcher
 - `data/viralkb/` — ViralKB storage (patterns.jsonl + embeddings.npy)
 
-## Provider Configuration (baoyu-imagine)
+## Provider Configuration
 
 Set any of these in `config/.env`:
 
 | Provider | Env Variable |
 |----------|-------------|
-| aiberm (default) | `AIBERM_API_KEY` |
+| OpenAI-compatible Images API | `OPENAI_COMPATIBLE_API_KEY`, `OPENAI_COMPATIBLE_BASE_URL` |
+| OpenAI official Images API | `OPENAI_API_KEY`, optional `OPENAI_BASE_URL` |
 | Google Gemini | `GOOGLE_AI_API_KEY` |
-| OpenAI | `OPENAI_API_KEY` |
-| OpenRouter | `OPENROUTER_API_KEY` |
-| DashScope | `DASHSCOPE_API_KEY` |
-| MiniMax | `MINIMAX_API_KEY` |
 
-Default: aiberm > Google Gemini > OpenAI
+Default: OpenAI-compatible > OpenAI official > Google Gemini

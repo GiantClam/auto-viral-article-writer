@@ -32,7 +32,7 @@ Each bold section heading below (exact match, not sequential insertion).
 
 ### Step 3 — Generate Image for Each Position
 
-Call `generate_image()` to create illustration (baoyu-imagine compatible):
+Call `generate_image()` to create illustration:
 
 ```python
 from tools.article_illustrate import generate_image
@@ -47,10 +47,11 @@ for spot in spots:
     spot['image_path'] = img_path
 ```
 
-Image generation uses requests directly to aiberm API (baoyu-imagine pattern):
-- Endpoint: `https://aiberm.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent`
-- Auth: `Bearer {AIBERM_API_KEY}` (falls back to `GOOGLE_AI_API_KEY`)
-- Params: `responseModalities: ["TEXT", "IMAGE"]`, `imageSize: 2K`
+Image generation uses requests directly to an Images API:
+- Endpoint: `{base_url}/v1/images/generations`
+- Model: `gpt-image-2` by default
+- Auth: `Bearer {OPENAI_COMPATIBLE_API_KEY}` or `Bearer {OPENAI_API_KEY}`
+- Params: `size`, `quality`, `background`, `output_format`, `moderation`, `n`
 
 Illustration types mapped to prompts:
 - `infographic` — data/figure content
@@ -80,7 +81,7 @@ Modification done in-place on original file.
 Returns section list, each containing `section`, `content`, `type`.
 
 ### `generate_image(prompt, output_path, aspect, quality)`
-Direct requests to aiberm API — follows baoyu-imagine pattern. Uses `AIBERM_API_KEY` → `GOOGLE_AI_API_KEY` fallback. Supports aspect: 16:9 / 1:1 / 4:3 / 9:16.
+Direct requests to OpenAI-compatible or OpenAI official Images API using `gpt-image-2` by default. Supports aspect: 16:9 / 1:1 / 4:3 / 3:4 / 9:16.
 
 ### `insert_images_into_article(article_path, spots)`
 Exact match `**section**` then insert `![alt](path)`.
@@ -97,4 +98,4 @@ Exact match `**section**` then insert `![alt](path)`.
 
 - `tools/article_illustrate.py` — Contains `analyze_article`, `generate_image`, `insert_images_into_article`
 - `tools/nanobanana_client.py` — Not used by article_illustrate.py (generates images via direct requests instead)
-- Both tools share the same aiberm API pattern and are baoyu-imagine compatible
+- Both tools share the same OpenAI-compatible/OpenAI official Images API configuration

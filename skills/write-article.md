@@ -35,7 +35,7 @@ def jina_read(url):
 
 ### Step 4 — Generate Article Outline
 
-Call Gemini (via aiberm API) to generate structured outline:
+Use the configured language model to generate structured outline:
 
 ```
 # 【5 Title Candidates】
@@ -60,7 +60,7 @@ from tools.article_illustrate import generate_and_insert_images
 
 generate_and_insert_images(
     article_path='output/wechat/{slug}-{date}.md',
-    api_key=os.getenv('AIBERM_API_KEY'),
+    api_key=os.getenv('OPENAI_COMPATIBLE_API_KEY') or os.getenv('OPENAI_API_KEY'),
     style='tech Illustration',
     count=3
 )
