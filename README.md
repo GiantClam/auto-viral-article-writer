@@ -18,7 +18,7 @@
 
 ## 这是什么
 
-这是一个面向内容工作流的 skill-package。它不是单一工具，也不是纯 prompt 集合，而是一套可以被 Agent 直接加载和复用的技能包。
+这是一个面向内容工作流的 Auto Viral Article Writer。它不是单一工具，也不是纯 prompt 集合，而是一套可以被 Agent 直接加载和复用的技能包。
 
 它要解决的是这件事：
 
