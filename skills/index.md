@@ -1,19 +1,22 @@
 # Skills Index
 
-All skills are located in the `skills/` directory and trigger on specific keywords.
+All skills are located in the `skills/` directory and trigger on specific keywords. The most complex skills use directory-style packaging with `SKILL.md` and optional `references/` files.
 
 ## Skill List
 
 | Skill | Triggers | Description |
 |-------|----------|-------------|
-| **hot-topics** | 今日热榜, AI热榜, 热门话题, 热点追踪, 今日话题, 热榜 | Multi-source (HN, Reddit, RSS) AI trending collector |
+| **hot-topics** | 今日热榜, AI热榜, 热门话题, 热点追踪, 今日话题, 热榜 | Multi-source trending collector with source ranking and optional ViralKB ingestion |
+| **research-brief** | 先研究一下, 帮我先梳理这个题, research brief, deep brief | Converts a promising topic into a source-backed article brief before drafting |
 | **viral-patterns** | viral-patterns, 爆款模式, 查找爆款, 找标题公式, 参考爆款, check article structure | ViralKB pattern lookup by keyword |
 | **viral-mining** | 挖掘爆款, viral mining, 发现爆款, 爆款挖掘 | Multi-source discovery + ViralKB ingestion |
-| **write-article** | 写文章, 生成文章, create-article, 写篇, 公众号, 小红书 | Full pipeline: research → outline → draft → illustrate |
+| **write-article** | 写文章, 生成文章, create-article, 写篇, 公众号, 小红书 | Full pipeline: research -> outline -> draft -> illustrate |
+| **article-audit** | 检查这篇文章是否齐全, 审计这篇文章, article audit, publish ready | Audits one article slug across brief, draft, cover, and inline image artifacts |
 | **cover-image** | 生成封面, create cover, 文章封面, cover image | YouTube thumbnail style personal brand cover |
 | **article-illustrate** | 生成插图, 文章配图, insert images, illustrate article | Auto-analyze + insert illustrations via Images API |
-| **image-generation** | 生成图片, create image, generate image, AI画图, draw | OpenAI/Gemini/OpenAI-compatible image generation |
+| **image-generation** | 生成图片, create image, generate image, AI画图, draw | Direct image generation across configured providers |
 | **baoyu-imagine** | baoyu-imagine, 生成图片, create image, generate image | Compatibility alias for image-generation |
+| **package-neat** | 整理一下, 同步文档, 收尾, release audit, skill audit | Syncs package docs, manifests, and public-facing repository metadata |
 
 ## Skill Orchestration
 
@@ -21,8 +24,10 @@ All skills are located in the `skills/` directory and trigger on specific keywor
 user: I want to write a WeChat article about Claude Code
 
 → hot-topics: Research latest Claude Code trends
+→ research-brief: Turn the topic into a stronger article brief
 → viral-patterns: Look up Claude-related viral title patterns
 → write-article: Generate full article (with illustrations via image-generation)
+→ article-audit: Check whether the article family is publish-ready
 → cover-image: Generate cover image via image-generation
 ```
 
@@ -33,6 +38,12 @@ user: I want to write a WeChat article about Claude Code
 - `tools/viral_kb.py` — ViralKB database interface
 - `tools/jina_reader.py` — URL → markdown fetcher
 - `data/viralkb/` — ViralKB storage (patterns.jsonl + embeddings.npy)
+
+## Layout Conventions
+
+- `skills/<name>/SKILL.md` - canonical skill entry point for complex skills
+- `skills/<name>/references/` - extra guidance loaded only when needed
+- all package skills now use directory-style entries with `SKILL.md`
 
 ## Provider Configuration
 

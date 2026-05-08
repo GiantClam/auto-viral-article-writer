@@ -1,0 +1,39 @@
+topic: Claude Code trend shift
+angle: Why the current wave is less about tools and more about workflow standardization
+audience: AI practitioners and content readers who follow agent tooling
+platform: wechat
+
+hkr:
+  happy: strong
+  knowledge: strong
+  resonance: medium
+
+archetype: phenomenon analysis
+hook: Everyone is talking about the tool, but the real change is the workflow it normalizes.
+
+title_patterns:
+  - "[Phenomenon] is not really about [surface topic]"
+  - "Why [current trend] matters more than it looks"
+
+emotional_triggers:
+  - curiosity
+  - urgency
+
+source_set:
+  - official launch note
+  - high-signal user discussion
+  - comparison article
+
+pattern_summary:
+  title_formulas:
+    - contrast formula
+  structure:
+    - observation -> tension -> explanation -> implication
+
+section_plan:
+  - what happened
+  - why people are reading it wrong
+  - what the deeper shift actually is
+
+risk_notes:
+  - avoid overstating the size of the trend without direct metrics

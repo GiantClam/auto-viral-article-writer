@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Local env and config
+config/.env
+config/user_preferences.json
+
+# Generated outputs
+output/
+data/viralkb/
+
+# Test and tooling caches
+.pytest_cache/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
