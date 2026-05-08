@@ -16,6 +16,8 @@ All notable repository-level changes to `skill-packaging` should be recorded her
 - `article-audit` skill for artifact-family auditing
 - end-to-end workflow example and smoke-test docs
 - article artifact family rules and slug rules
+- `cover-image` skill: `--article-title` injection for generations endpoint, `--ref` for img2img (edits) endpoint; title-only path renders text more cleanly
+- `--article-title` argument in `nanobanana_client.py`: auto-injects article title into built-in portrait prompt
 
 ### Changed
 
@@ -24,6 +26,9 @@ All notable repository-level changes to `skill-packaging` should be recorded her
 - expanded `write-article` with HKR gating, article archetypes, editorial boundaries, and stronger quality checks
 - expanded `hot-topics` and `viral-mining` with source-discipline and research-sufficiency guidance
 - aligned package outputs around reusable brief, draft, cover, and inline-image conventions
+- `cover-image` skill: updated generation pathway documentation to clarify generations vs. edits endpoint selection
+- `nanobanana_client.py`: `--article-title` without `--ref` now uses generations endpoint for cleaner text rendering; `--ref` enables img2img for higher subject likeness
+- `docs/skills/cover-image.md`: added generation pathway table
 
 ### Repository Outcome
 

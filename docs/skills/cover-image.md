@@ -34,3 +34,13 @@ If a brief or draft already exists, inherit its slug exactly.
 ## Boundary
 
 This skill is for the hero cover image, not for inline article illustrations.
+
+## Generation Pathways
+
+| Situation | Endpoint | Notes |
+|---|---|---|
+| `--article-title` alone | `generations` | Best text rendering; uses built-in portrait prompt |
+| `--ref` (img2img) | `edits` | Max likeness when title written directly in `--prompt` |
+| Custom `--prompt` | `generations` or `edits` | Depends on whether `--ref` is passed |
+
+For the best balance of likeness + title legibility, use `--ref` + write title in prompt.

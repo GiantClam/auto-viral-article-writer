@@ -599,6 +599,11 @@ Examples:
         default=None,
         help="Mask image path for inpainting edits (optional)",
     )
+    parser.add_argument(
+        "--article-title",
+        default=None,
+        help="Article title to inject into default cover prompt (optional)",
+    )
 
     args = parser.parse_args()
 
@@ -622,6 +627,35 @@ Examples:
     # Apply default portrait cover prompt if not provided
     if not args.prompt:
         args.prompt = PORTRAIT_COVER_PROMPT
+
+    # If --article-title is provided and we are using the default prompt,
+    # inject the title into the prompt
+    if args.article_title and args.prompt == PORTRAIT_COVER_PROMPT:
+        title = args.article_title.strip()
+        if "——" in title:
+            parts = title.split("——", 1)
+            main_title = parts[0].strip()
+            subtitle = parts[1].strip()
+        elif "：" in title:
+            parts = title.split("：", 1)
+            main_title = parts[0].strip()
+            subtitle = parts[1].strip()
+        elif ":" in title:
+            parts = title.split(":", 1)
+            main_title = parts[0].strip()
+            subtitle = parts[1].strip()
+        else:
+            main_title = title
+            subtitle = None
+        if subtitle:
+            args.prompt = PORTRAIT_COVER_PROMPT.replace("[MAIN_TITLE]", main_title).replace("[SUBTITLE]", subtitle)
+        else:
+            args.prompt = PORTRAIT_COVER_PROMPT.replace("[MAIN_TITLE]", main_title).replace("subtitle '[SUBTITLE]' below", "no subtitle")
+
+    # When --article-title is used without explicit --ref, use generations endpoint
+    # (img2img/edits tends to drop text from prompt). But if user also passed --ref,
+    # respect it and use img2img for better likeness.
+    args.use_generations_for_title = bool(args.article_title) and args.ref is None
 
     # Load API key
     api_key = args.api_key
@@ -738,6 +772,9 @@ Examples:
                 verbose=args.verbose,
             )
         elif use_openai_compatible or use_openai_official:
+            # When --article-title is used without --ref, use generations endpoint
+            # (img2img/edits tends to drop text). Explicit --ref enables img2img.
+            ref_for_call = None if args.use_generations_for_title else args.ref
             generate_with_openai_images(
                 api_key,
                 args.prompt,
@@ -748,7 +785,7 @@ Examples:
                 size=args.image_size,
                 quality=args.image_quality,
                 output_format=args.image_format,
-                ref_images=args.ref,
+                ref_images=ref_for_call,
                 mask_path=args.mask,
             )
         elif args.gemini_image:
