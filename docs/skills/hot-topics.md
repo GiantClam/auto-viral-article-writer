@@ -27,8 +27,15 @@ Collect current topics from multiple sources and rank them for downstream writin
 
 - ranked topic lists
 - source grouping
+- separation between discussion heat and strategic importance when needed
 - optional ViralKB ingestion summary
 - optional article brief seed
+
+## Ranking Notes
+
+- `hot-topics` should not treat the loudest HN or Reddit thread as automatically the most important topic of the day.
+- Major product updates such as new Office support, Chrome support, model launches, or capability expansions can outrank noisier discussion threads.
+- If source coverage is reduced, the output should say so explicitly instead of pretending to be a complete market-wide ranking.
 
 ## Boundary
 

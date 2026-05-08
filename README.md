@@ -83,6 +83,7 @@ setup
 典型产物：
 
 - 按平台归类的热点清单
+- 区分“讨论热度”和“行业重要性”的热点排序
 - `output/briefs/` 下的结构化 article brief
 - 本地 ViralKB 模式结果
 - `output/wechat/{slug}-article.md` 形式的文章草稿
@@ -226,6 +227,13 @@ skill-packaging/
 - 目标站点已登录
 - OpenCLI Browser Bridge 扩展已启用
 - `python tools/opencli_fetcher.py --check` 能通过
+
+补充说明：
+
+- `tools/opencli_fetcher.py` 现在会在 Linux 和 macOS 上直接解析 `opencli`
+- 在 Windows 上会优先解析 `opencli.cmd` / `opencli.exe` / `opencli.bat`
+- 如果只有 `opencli.ps1`，会自动通过 PowerShell 调用，避免 Python 子进程找不到命令
+- Windows 控制台若不支持部分 Unicode 字符，脚本会回退到安全输出而不是直接崩溃
 
 ### 封面图缺少参考图
 

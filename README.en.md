@@ -74,6 +74,7 @@ setup
 Expected outputs:
 
 - topic summaries grouped by platform and category
+- rankings that can distinguish discussion heat from strategic industry importance
 - structured article briefs under `output/briefs/`
 - local ViralKB pattern lookups
 - markdown drafts such as `output/wechat/{slug}-article.md`
@@ -200,6 +201,13 @@ Make sure the article contains `**bold section headings**` after the `---` divid
 ### `opencli` returns no results
 
 Check that Chrome is running, the target site is logged in, the OpenCLI Browser Bridge extension is enabled, and `python tools/opencli_fetcher.py --check` succeeds.
+
+Additional notes:
+
+- `tools/opencli_fetcher.py` now resolves `opencli` directly on Linux and macOS
+- on Windows it prefers `opencli.cmd`, `opencli.exe`, or `opencli.bat`
+- if only `opencli.ps1` exists, it automatically invokes it through PowerShell so Python subprocesses can still use it
+- if the Windows console cannot encode some Unicode characters, the script now falls back to safe output instead of crashing
 
 ### Cover image reference missing
 
