@@ -4,7 +4,7 @@
 
 # Auto Viral Article Writer
 
-为 Agent 提供的内容生产 skill package：热点采集 -> 爆款模式 -> 文章起草 -> 正文插图 -> 封面生成。
+为 Agent 提供的内容生产 auto viral article writer：热点采集 -> 爆款模式 -> 文章起草 -> 正文插图 -> 封面生成。
 
 ![License](https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/Skills-12-10B981?style=for-the-badge)
