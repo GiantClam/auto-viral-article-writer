@@ -40,17 +40,50 @@ Use this skill for the full article production flow, especially when the user wa
 
 ## Workflow
 
-1. Run a topic viability check before drafting.
-2. Run `hot-topics` when the topic still needs research or current framing.
-3. Run `viral-patterns` to retrieve structure and title patterns.
-4. Collect any needed authoritative source material.
-5. Classify the article into a working archetype.
-6. Assemble or refine the article brief.
-7. Draft a structured outline from the article brief.
-8. Expand the outline into the full article.
-9. Run the quality checklist before calling it complete.
-10. Save to the correct output path.
-11. Hand off to `article-illustrate` when visuals are needed.
+1. **Run a topic viability check** before drafting (HKR gate).
+2. **Run `hot-topics`** when the topic still needs research or current framing.
+3. **Decide if deep research is needed.** If the topic is:
+   - A named entity (person, company, product, project)
+   - An investigation/experiment archetype
+   - Complex enough that hot-topics surface signals are insufficient
+   → Run `last30days` for comprehensive 30-day picture before continuing
+4. **Run `viral-patterns`** to retrieve structure and title patterns.
+5. Collect any needed authoritative source material.
+6. Classify the article into a working archetype.
+7. Assemble or refine the article brief.
+8. Draft a structured outline from the article brief.
+9. Expand the outline into the full article.
+10. Run the quality checklist before calling it complete.
+11. Save to the correct output path.
+12. Hand off to `article-illustrate` when visuals are needed.
+
+## When to Trigger `last30days`
+
+`last30days` is triggered **inside `write-article`** (not as a separate manual step) when:
+
+| Condition | Why |
+|---|---|
+| Topic is a named entity (person/company/product) | hot-topics only gives surface trending; last30days gives full 30-day community picture including GitHub activity, X timeline, Reddit deep-dives |
+| Article archetype is investigation or experiment | Needs depth beyond what hot-topics surfaces |
+| User asks for "深度研究" or "全面调研" | Automatic trigger |
+| hot-topics output is thin but topic seems important | last30days may find signals hot-topics missed |
+
+**How it integrates into write-article:**
+- Step 3: invoke `last30days` via Bash (Python engine) with entity resolution flags
+- last30days output (synthesis + evidence) becomes part of `source_set` in the article brief
+- The synthesis paragraphs directly feed the article body
+- Citation format from last30days (inline `[name](url)`) preserved in article
+
+**How to invoke last30days inside write-article:**
+```bash
+SKILL_DIR="D:\OpenCode\writer\.opencode\skills\last30days\skills\last30days"
+if [ -f "$SKILL_DIR/scripts/last30days.py" ]; then
+  LAST30DAYS_PYTHON=$(for py in python3.14 python3.13 python3.12 python3; do command -v $py 2>/dev/null && $py -c 'import sys; raise SystemExit(0 if sys.version_info>=(3,12) else 1)' 2>/dev/null && echo $py && break; done)
+  $LAST30DAYS_PYTHON "$SKILL_DIR/scripts/last30days.py" "{TOPIC}" --emit=compact 2>&1
+fi
+```
+
+**Output convention:** last30days badge + synthesis becomes `source_set.last30days_synthesis` in the article brief. Cite with `[author/platform]` inline markdown links per LAW 8.
 
 ## Article Brief Handoff
 

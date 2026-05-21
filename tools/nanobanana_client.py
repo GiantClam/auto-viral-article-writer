@@ -206,6 +206,26 @@ def generate_with_openai_images(
     except _req.exceptions.Timeout:
         print("Request timed out")
         return False
+    except _req.exceptions.HTTPError as e:
+        status = getattr(e.response, "status_code", "unknown")
+        body = ""
+        try:
+            body = e.response.text[:500]
+        except Exception:
+            body = ""
+        print(f"HTTP error {status}: {str(e)}")
+        if ref_images:
+            print(
+                "Reference-image cover generation failed at the provider endpoint. "
+                "This is usually a provider/auth/endpoint issue, not a prompt issue."
+            )
+            print(
+                "Do not replace this with a local pasted-photo fallback if the user asked "
+                "for reference-based generation. Fix the provider path or report the failure clearly."
+            )
+        if body:
+            print(f"Response body: {body}")
+        return False
     except Exception as e:
         print(f"Error: {str(e)}")
         return False
@@ -613,15 +633,19 @@ Examples:
 
     # Built-in portrait cover prompt (used when --prompt is not provided)
     PORTRAIT_COVER_PROMPT = (
-        "WeChat article cover: right side has a 28-year-old East Asian professional, male, "
-        "wearing minimalist dark hoodie, slightly turned, warm orange glow on silhouette, "
-        "gesturing toward left. Left area reserved for title: main title '[MAIN_TITLE]' "
-        "in large bold Chinese font, subtitle '[SUBTITLE]' below. Background: subtle "
-        "data/task visualization elements (curves, nodes, tags) in cool cyan. "
-        "Color palette: warm orange + cream gradient (Anthropic brand), navy blue, "
-        "amber accent. Style: realistic photography + light concept compositing, "
-        "professional tech media feel, 16:9 horizontal. Bottom-right: small watermark space. "
-        "Negative: no cyberpunk neon, no cartoon, no oversaturation."
+        "WeChat article cover: use the reference photo to generate the same person with "
+        "preserved facial identity, hair, and general age. Recompose the subject into a "
+        "professional editorial half-body portrait on the right side, naturally integrated "
+        "into the scene rather than pasted. The person wears a minimalist dark hoodie or "
+        "tech-casual outfit, with warm orange rim light on hair and shoulders. Left area "
+        "reserved for title: main title '[MAIN_TITLE]' in large bold Chinese font, subtitle "
+        "'[SUBTITLE]' below. Background: subtle data/task visualization elements (curves, "
+        "nodes, tags) in cool cyan. Color palette: warm orange + cream gradient (Anthropic "
+        "brand), navy blue, amber accent. Style: realistic photography + light concept "
+        "compositing, cohesive lighting, depth, shadow integration, professional tech media "
+        "feel, 16:9 horizontal. Bottom-right: small watermark space. Negative: no collage "
+        "look, no cutout edge, no sticker effect, no cyberpunk neon, no cartoon, no "
+        "oversaturation."
     )
 
     # Apply default portrait cover prompt if not provided

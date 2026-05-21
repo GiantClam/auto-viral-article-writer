@@ -6,6 +6,7 @@ This directory contains public-facing overview pages for each skill in the packa
 
 - `setup.md`
 - `hot-topics.md`
+- `last30days.md`
 - `research-brief.md`
 - `viral-patterns.md`
 - `viral-mining.md`

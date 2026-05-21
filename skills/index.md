@@ -7,6 +7,7 @@ All skills are located in the `skills/` directory and trigger on specific keywor
 | Skill | Triggers | Description |
 |-------|----------|-------------|
 | **hot-topics** | 今日热榜, AI热榜, 热门话题, 热点追踪, 今日话题, 热榜 | Multi-source trending collector with source ranking and optional ViralKB ingestion |
+| **last30days** | last30days, /last30days, 深度研究, research topic, 过去30天 | Deep research across Reddit/X/YouTube/HN/Polymarket/GitHub, synthesized into one brief |
 | **research-brief** | 先研究一下, 帮我先梳理这个题, research brief, deep brief | Converts a promising topic into a source-backed article brief before drafting |
 | **viral-patterns** | viral-patterns, 爆款模式, 查找爆款, 找标题公式, 参考爆款, check article structure | ViralKB pattern lookup by keyword |
 | **viral-mining** | 挖掘爆款, viral mining, 发现爆款, 爆款挖掘 | Multi-source discovery + ViralKB ingestion |
@@ -23,13 +24,20 @@ All skills are located in the `skills/` directory and trigger on specific keywor
 ```
 user: I want to write a WeChat article about Claude Code
 
-→ hot-topics: Research latest Claude Code trends
+→ hot-topics: Research latest Claude Code trends (daily discovery)
+→ last30days: Deep research on Claude Code ecosystem (deep investigation)
 → research-brief: Turn the topic into a stronger article brief
 → viral-patterns: Look up Claude-related viral title patterns
 → write-article: Generate full article (with illustrations via image-generation)
 → article-audit: Check whether the article family is publish-ready
 → cover-image: Generate cover image via image-generation
 ```
+
+**hot-topics vs last30days:**
+- `hot-topics` — daily discovery: what's trending today across AI?
+- `last30days` — deep research: what's the complete picture of one topic over 30 days?
+
+The two are complementary: `hot-topics` feeds the discovery layer; `last30days` handles the investigation layer.
 
 ## Core Tools
 
