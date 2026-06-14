@@ -4,7 +4,7 @@
 
 # Auto Viral Article Writer
 
-为 Agent 提供的内容生产与分发 skill package：热点采集 -> 爆款模式 -> 文章起草 -> 多平台改写 -> 评分预测复盘 -> 封面与插图。
+Auto Viral Article Writer：为 Agent 提供的内容生产与分发系统，覆盖热点采集 -> 爆款模式 -> 文章起草 -> 多平台改写 -> 评分预测复盘 -> 封面与插图。
 
 ![License](https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/Skills-16-10B981?style=for-the-badge)
@@ -18,7 +18,7 @@
 
 ## 这是什么
 
-这是一个面向内容工作流的 skill package。它不是单一工具，也不是纯 prompt 集合，而是一套可以被 Agent 直接加载和复用的内容生产与分发系统。
+这是 Auto Viral Article Writer。它不是单一工具，也不是纯 prompt 集合，而是一套可以被 Agent 直接加载和复用的内容生产与分发系统。
 
 它要解决的是这件事：
 
@@ -42,7 +42,7 @@
 - 只想要一个独立画图工具的人
 - 不需要热点研究、只想随便写点博客的人
 - 不接受本地 `output/`、`config/`、`data/viralkb/` 文件结构的人
-- 想要云端托管产品而不是本地 skill 包的人
+- 想要云端托管产品而不是本地 Auto Viral Article Writer 安装的人
 
 ---
 

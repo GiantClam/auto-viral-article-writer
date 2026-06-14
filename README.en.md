@@ -1,6 +1,6 @@
 # Auto Viral Article Writer
 
-AI content production and distribution skill package for agents: hot topics -> viral patterns -> article drafting -> multi-platform repurposing -> score/predict/retro -> illustrations and cover image.
+Auto Viral Article Writer: an AI content production and distribution system for agents covering hot topics -> viral patterns -> article drafting -> multi-platform repurposing -> score/predict/retro -> illustrations and cover image.
 
 ![License](https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/Skills-16-10B981?style=for-the-badge)
@@ -33,7 +33,7 @@ This repository packages a repeatable content workflow as installable skills. It
 
 - General-purpose blogging with no topic research step
 - Users who only want a standalone image generator
-- Users who want a hosted product instead of a local skill package
+- Users who want a hosted product instead of a local Auto Viral Article Writer installation
 - Workflows that do not want local `output/`, `config/`, and `data/viralkb/` directories
 
 ---
