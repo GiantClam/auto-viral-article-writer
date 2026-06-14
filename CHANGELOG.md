@@ -2,6 +2,33 @@
 
 All notable repository-level changes to `skill-packaging` should be recorded here.
 
+## 2026-05-29
+
+### Added
+
+- multi-platform content workflow skills: `repurpose-content`, `article-score-retro`, `platform-rubric-manager`, `multi-platform-content`
+- platform rubric files under `rubrics/` for WeChat, Xiaohongshu, X, TikTok, Reddit, dev.to, and Facebook
+- `docs/runbooks/multi-platform-content-demo-runbook.md` for a full content-package demo path
+- `docs/skills/` showcase pages for the new multi-platform skills
+- `docs/skills/last30days.md` as the public-facing overview page for the bundled `last30days` skill
+- `skills/last30days` as a Git submodule pointing at the upstream `mvanhorn/last30days-skill` repository
+
+### Changed
+
+- `write-article` now explicitly hands off to `cover-image` before `article-illustrate`, and optionally to `repurpose-content` after the mother draft is complete
+- `README.md` and `README.en.md` now describe the package as a multi-platform content system, not only a single article workflow
+- `skills/index.md` now exposes the multi-platform workflow chain and the new skills
+- `docs/skills/README.md` now includes the new skills in the public showcase index
+- `docs/overview/skill-package-overview.md` now documents the multi-platform distribution path
+- `docs/overview/article-artifact-family.md` now recognizes `output/content/{slug}/` as part of the article artifact family
+- `docs/install/README.md` now documents submodule initialization for bundled external skills
+
+### Repository Outcome
+
+- the package now behaves like a content middle layer: mother draft -> native rewrites -> scoring/prediction/retro -> rubric evolution
+- the repository now keeps the external `last30days` skill as a submodule instead of flattening it into the main tree
+- public docs and manifest files now reflect the expanded multi-platform workflow
+
 ## 2026-05-08
 
 ### Added
