@@ -8,7 +8,7 @@ Auto Viral Article Writer: an AI content production and distribution system for 
 
 **Supported Platforms:** OpenCode, Codex, Claude Code, OpenClaw, Hermes
 
-This repository packages a repeatable content workflow as installable skills. It is meant for people who want an agent to discover timely topics, reuse proven viral structures, draft long-form articles, repurpose them for multiple platforms, and generate matching visuals with predictable local outputs.
+Auto Viral Article Writer is a repeatable content production and distribution system that can be installed into agent environments. It is meant for people who want an agent to discover timely topics, reuse proven viral structures, draft long-form articles, repurpose them for multiple platforms, and generate matching visuals with predictable local outputs.
 
 ---
 
@@ -27,7 +27,7 @@ This repository packages a repeatable content workflow as installable skills. It
 - WeChat article production
 - AI and SaaS topic research
 - Pattern-based long-form drafting
-- Teams that want reusable content-production skills
+- Teams that want a reusable, installable content workflow
 
 ## Not A Good Fit
 

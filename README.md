@@ -18,7 +18,7 @@ Auto Viral Article Writer：为 Agent 提供的内容生产与分发系统，覆
 
 ## 这是什么
 
-这是 Auto Viral Article Writer。它不是单一工具，也不是纯 prompt 集合，而是一套可以被 Agent 直接加载和复用的内容生产与分发系统。
+这是 Auto Viral Article Writer。它不是单一工具，也不是纯 prompt 集合，而是一套可以被 Agent 直接加载、安装和复用的内容生产与分发系统。
 
 它要解决的是这件事：
 
@@ -35,7 +35,7 @@ Auto Viral Article Writer：为 Agent 提供的内容生产与分发系统，覆
 - 写公众号长文的人
 - 做 AI / SaaS / 内容研究的人
 - 想把选题、结构、成稿、配图串成一个流程的人
-- 想把内容生产沉淀成可安装 skill 的团队
+- 想把内容生产沉淀成可安装工作流的团队
 
 ## 不适合谁
 
