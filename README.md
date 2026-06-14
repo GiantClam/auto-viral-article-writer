@@ -4,7 +4,7 @@
 
 # Auto Viral Article Writer
 
-Auto Viral Article Writer：为 Agent 提供的内容生产与分发系统，覆盖热点采集 -> 爆款模式 -> 文章起草 -> 多平台改写 -> 评分预测复盘 -> 封面与插图。
+Auto Viral Article Writer：面向 Agent 的内容生产与分发系统，把热点研究、爆款结构、文章起草、多平台改写、评分预测复盘、封面与插图串成一个稳定工作流。
 
 ![License](https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/Skills-16-10B981?style=for-the-badge)
@@ -20,6 +20,10 @@ Auto Viral Article Writer：为 Agent 提供的内容生产与分发系统，覆
 
 这是 Auto Viral Article Writer。它不是单一工具，也不是纯 prompt 集合，而是一套可以被 Agent 直接加载、安装和复用的内容生产与分发系统。
 
+它不是在回答“怎么多写一点”，而是在回答另一件更重要的事：
+
+**怎么让一个 Agent 按稳定流程持续产出、分发、复盘和进化内容。**
+
 它要解决的是这件事：
 
 - 先找到值得写的话题
@@ -29,6 +33,14 @@ Auto Viral Article Writer：为 Agent 提供的内容生产与分发系统，覆
 - 最后补齐评分、预测、复盘，以及封面和插图
 
 如果你想让 Agent 按稳定流程做内容，而不是每次从零开始，这个包就是为这个场景设计的。
+
+和普通 AI 内容工具相比，它更像一条完整流水线：
+
+- 不只是生成草稿
+- 还包括分发改写
+- 还包括发布前判断
+- 还包括发布后复盘
+- 以及平台级标准的持续收紧
 
 ## 适合谁
 

@@ -1,6 +1,6 @@
 # Auto Viral Article Writer
 
-Auto Viral Article Writer: an AI content production and distribution system for agents covering hot topics -> viral patterns -> article drafting -> multi-platform repurposing -> score/predict/retro -> illustrations and cover image.
+Auto Viral Article Writer: a content production and distribution system for agents that turns hot-topic research, viral structure reuse, article drafting, multi-platform repurposing, score/predict/retro, and visual generation into one stable workflow.
 
 ![License](https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge)
 ![Skills](https://img.shields.io/badge/Skills-16-10B981?style=for-the-badge)
@@ -9,6 +9,20 @@ Auto Viral Article Writer: an AI content production and distribution system for 
 **Supported Platforms:** OpenCode, Codex, Claude Code, OpenClaw, Hermes
 
 Auto Viral Article Writer is a repeatable content production and distribution system that can be installed into agent environments. It is meant for people who want an agent to discover timely topics, reuse proven viral structures, draft long-form articles, repurpose them for multiple platforms, and generate matching visuals with predictable local outputs.
+
+It does not try to answer only “how do we generate more content?”
+
+It answers the more important systems question:
+
+**How do we make an agent produce, distribute, review, and improve content through a repeatable workflow instead of one-off prompting?**
+
+Compared with a typical AI writing tool, it behaves more like a content pipeline:
+
+- not only article generation
+- but also platform-native repurposing
+- pre-publish judgment
+- post-publish retrospective
+- and platform-level rubric tightening over time
 
 ---
 
