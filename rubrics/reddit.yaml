@@ -1,0 +1,63 @@
+platform: reddit
+goal: earn trust through authenticity, discussion value, and strong community fit without sounding like marketing
+audience:
+  - community members
+  - practitioners
+  - skeptical readers
+  - niche enthusiasts
+
+dimensions:
+  - key: authenticity
+    description: the post sounds like a real experience, question, or useful observation rather than a promo asset
+  - key: community_fit
+    description: the framing fits the target subreddit norms and expectations
+  - key: discussion_value
+    description: the post invites useful replies, debate, or sharing of comparable experiences
+  - key: specificity
+    description: the post contains enough concrete detail to be credible and interesting
+  - key: anti_marketing_tone
+    description: the writing avoids sounding polished in a way that triggers distrust
+  - key: usefulness
+    description: the reader gets something actionable, clarifying, or worth thinking about
+
+strong_signals:
+  - specific experience or concrete observation appears early
+  - tone feels honest, grounded, and not overproduced
+  - there is something worth discussing, not just announcing
+  - the post respects subreddit context and jargon level
+  - the reader can respond with their own view or example
+  - useful detail is present without becoming bloated
+
+risk_signals:
+  - title or body feels like promotion copy
+  - over-polished tone makes the post sound manufactured
+  - too much self-congratulation or exaggerated certainty
+  - no real question, tension, or discussion hook
+  - generic summary with no subreddit-specific relevance
+  - obvious cross-post energy from another platform
+
+tone_rules:
+  - prefer plain, direct, human language
+  - write as a participant, not as a brand account unless the subreddit context clearly allows it
+  - avoid hype-heavy claims without evidence or lived detail
+  - avoid forcing authority; credibility should come from specificity
+
+cta_rules:
+  - prefer open-ended discussion prompts
+  - avoid pushy funnel-style CTA language
+  - asking for others' experience is usually better than asking for follows or clicks
+
+scoring_hints:
+  high_score_when:
+    - the post feels native to a subreddit rather than imported from another platform
+    - readers would naturally reply with their own experience or disagreement
+    - the content is specific enough to be trusted
+  low_score_when:
+    - the post feels like disguised marketing
+    - the content is polished but emotionally empty
+    - there is no obvious reason for the community to engage
+
+retro_update_rules:
+  - repeated weak comments should first trigger discussion_value review
+  - repeated suspicion or accusation of self-promotion should trigger anti_marketing_tone review
+  - repeated views with weak upvotes should trigger community_fit review

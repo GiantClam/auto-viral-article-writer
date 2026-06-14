@@ -1,0 +1,63 @@
+platform: xiaohongshu
+goal: stop the scroll, create save intent, and package one idea into a highly shareable mobile-first post
+audience:
+  - creators
+  - operators
+  - young professionals
+  - product-curious readers
+  - AI tool users
+
+dimensions:
+  - key: cover_promise
+    description: the cover clearly promises a result, contrast, or useful takeaway
+  - key: first_screen_hook
+    description: the first screen makes the reader want to continue immediately
+  - key: scannability
+    description: the post is easy to skim on mobile with clear visual rhythm
+  - key: saveability
+    description: the reader feels this is worth saving for later
+  - key: emotional_resonance
+    description: the post creates recognition, urgency, relief, curiosity, or aspiration
+  - key: platform_fit
+    description: the post feels native to Xiaohongshu rather than copied from another platform
+
+strong_signals:
+  - strong cover-title match
+  - the result or lesson appears early
+  - one screen contains one useful unit of information
+  - concrete numbers, mistakes, or outcomes are surfaced fast
+  - a practical checklist or concise framework is present
+  - wording feels conversational and mobile-native
+
+risk_signals:
+  - copied long-paragraph style from WeChat
+  - opening is too abstract or too slow
+  - no obvious save or share value
+  - useful points are buried too late
+  - tone feels stiff, lecture-like, or over-explained
+  - title is descriptive but not clickable
+
+tone_rules:
+  - prefer concise, direct, and slightly conversational language
+  - lead with result, lesson, mistake, or contrast
+  - avoid long transitions and heavy exposition
+  - avoid sounding like a corporate announcement or whitepaper
+
+cta_rules:
+  - prefer save, comment, or share-oriented CTAs
+  - CTA should feel like a natural continuation of the value, not a hard sell
+
+scoring_hints:
+  high_score_when:
+    - the reader can understand the payoff within the first screen
+    - the post is easy to screenshot, save, or forward
+    - every paragraph earns its place quickly
+  low_score_when:
+    - the post needs patience before it becomes useful
+    - the same point is explained too many times
+    - the content is valuable but packaged like a blog instead of a note
+
+retro_update_rules:
+  - repeated weak save rate should first trigger cover_promise and saveability review
+  - repeated weak read-through should first trigger first_screen_hook review
+  - repeated strong clicks but weak completion should trigger scannability review

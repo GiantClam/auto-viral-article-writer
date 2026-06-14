@@ -11,6 +11,10 @@ This directory contains public-facing overview pages for each skill in the packa
 - `viral-patterns.md`
 - `viral-mining.md`
 - `write-article.md`
+- `repurpose-content.md`
+- `article-score-retro.md`
+- `platform-rubric-manager.md`
+- `multi-platform-content.md`
 - `article-audit.md`
 - `article-illustrate.md`
 - `cover-image.md`

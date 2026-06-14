@@ -67,7 +67,11 @@ See `docs/examples/smoke-test.md` for the fastest practical test path through th
 
 ### Article Production
 
-`write-article` -> `article-illustrate` -> `cover-image`
+`write-article` -> `cover-image` -> `article-illustrate`
+
+### Multi-Platform Distribution
+
+`write-article` -> `repurpose-content` -> `article-score-retro` -> `platform-rubric-manager`
 
 ### Article Readiness Audit
 

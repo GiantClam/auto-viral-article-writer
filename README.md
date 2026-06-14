@@ -4,10 +4,10 @@
 
 # Auto Viral Article Writer
 
-为 Agent 提供的内容生产 auto viral article writer：热点采集 -> 爆款模式 -> 文章起草 -> 正文插图 -> 封面生成。
+为 Agent 提供的内容生产与分发 skill package：热点采集 -> 爆款模式 -> 文章起草 -> 多平台改写 -> 评分预测复盘 -> 封面与插图。
 
 ![License](https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge)
-![Skills](https://img.shields.io/badge/Skills-12-10B981?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-16-10B981?style=for-the-badge)
 ![Platforms](https://img.shields.io/badge/Platforms-5-F59E0B?style=for-the-badge)
 
 **支持平台：** OpenCode、Codex、Claude Code、OpenClaw、Hermes
@@ -18,14 +18,15 @@
 
 ## 这是什么
 
-这是一个面向内容工作流的 Auto Viral Article Writer。它不是单一工具，也不是纯 prompt 集合，而是一套可以被 Agent 直接加载和复用的技能包。
+这是一个面向内容工作流的 skill package。它不是单一工具，也不是纯 prompt 集合，而是一套可以被 Agent 直接加载和复用的内容生产与分发系统。
 
 它要解决的是这件事：
 
 - 先找到值得写的话题
 - 再复用高信号的爆款结构
 - 然后产出可继续加工的文章草稿
-- 最后补齐插图和封面
+- 再改写为多平台原生版本
+- 最后补齐评分、预测、复盘，以及封面和插图
 
 如果你想让 Agent 按稳定流程做内容，而不是每次从零开始，这个包就是为这个场景设计的。
 
@@ -55,6 +56,10 @@
 | `viral-patterns` | 从 ViralKB 里取爆款标题和结构模式 | `爆款模式`, `找标题公式`, `参考爆款` |
 | `viral-mining` | 从外部发现高信号内容并入库 ViralKB | `挖掘爆款`, `发现爆款`, `viral mining` |
 | `write-article` | 从研究到草稿的完整写作流程 | `写文章`, `生成文章`, `公众号文章` |
+| `repurpose-content` | 把公众号母稿改写成多平台原生版本 | `改写成 X 版本`, `改成小红书`, `repurpose this article` |
+| `article-score-retro` | 对平台稿做发布前评分、盲预测、发布后复盘 | `score this post`, `predict this`, `retro this post` |
+| `platform-rubric-manager` | 维护各平台 scoring rubric，并根据 retro 更新 | `update wechat rubric`, `review x rubric` |
+| `multi-platform-content` | 编排母稿、改写、评分、预测、复盘的整套工作流 | `做一套多平台内容包`, `run the multi-platform workflow` |
 | `article-audit` | 审计单篇文章的 brief、draft、cover 和 inline images 是否齐全 | `检查这篇文章是否齐全`, `审计这篇文章`, `article audit` |
 | `article-illustrate` | 给现有文章自动插图 | `生成插图`, `文章配图` |
 | `cover-image` | 生成文章封面图 | `生成封面`, `文章封面` |
@@ -76,8 +81,11 @@ setup
   -> research-brief
   -> viral-patterns
   -> write-article
+       -> cover-image
+       -> repurpose-content
+            -> article-score-retro
+                 -> platform-rubric-manager
        -> article-illustrate
-  -> cover-image
 ```
 
 典型产物：
@@ -87,6 +95,7 @@ setup
 - `output/briefs/` 下的结构化 article brief
 - 本地 ViralKB 模式结果
 - `output/wechat/{slug}-article.md` 形式的文章草稿
+- `output/content/{slug}/` 下的多平台 ledger
 - `output/images/wechat/{slug}-01.png` 这类 inline images
 - `output/images/wechat/{slug}-cover-final.png` 形式的封面图
 - 可审计的 article artifact family 状态
@@ -174,10 +183,15 @@ skill-packaging/
 │   ├── viral-patterns/
 │   ├── viral-mining/
 │   ├── write-article/
+│   ├── repurpose-content/
+│   ├── article-score-retro/
+│   ├── platform-rubric-manager/
+│   ├── multi-platform-content/
 │   ├── article-illustrate/
 │   ├── cover-image/
 │   ├── image-generation/
 │   └── baoyu-imagine/
+├── rubrics/
 ├── tools/
 ├── config/
 ├── scripts/
@@ -192,8 +206,10 @@ skill-packaging/
 - 技能总览：`skills/index.md`
 - 技能展示页：`docs/skills/README.md`
 - 仓库总览：`docs/overview/skill-package-overview.md`
+- 平台标准说明：`rubrics/README.md`
 - 文章产物族规范：`docs/overview/article-artifact-family.md`
 - slug 命名规则：`docs/overview/slug-rules.md`
+- 多平台试跑 runbook：`docs/runbooks/multi-platform-content-demo-runbook.md`
 - 端到端工作流示例：`docs/examples/article-workflow-example.md`
 - 快速试跑 smoke test：`docs/examples/smoke-test.md`
 - 仓库一致性检查：`python tools/repo_consistency.py`

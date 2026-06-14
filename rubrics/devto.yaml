@@ -1,0 +1,62 @@
+platform: devto
+goal: teach something concrete, credible, and reusable to technical readers through a clear implementation-focused article
+audience:
+  - developers
+  - engineers
+  - technical founders
+  - tooling builders
+
+dimensions:
+  - key: technical_clarity
+    description: the article explains the idea clearly without hiding behind vague abstractions
+  - key: implementation_usefulness
+    description: the reader can reuse the method, code pattern, or workflow in practice
+  - key: structure_logic
+    description: the article moves in a clean technical order from problem to solution to takeaway
+  - key: example_quality
+    description: examples are concrete enough to prove the point and reduce ambiguity
+  - key: credibility
+    description: claims feel grounded in real work, not generic opinion or AI summary language
+  - key: platform_fit
+    description: the article feels native to dev.to rather than copied from a marketing blog or social post
+
+strong_signals:
+  - the technical problem is stated early
+  - the article shows how something works, not just why it matters
+  - examples or workflows are concrete enough to be adapted
+  - the writing respects the reader's technical intelligence
+  - the ending leaves a reusable pattern or lesson
+  - the tone is practical, not salesy
+
+risk_signals:
+  - too much high-level framing before any real technical substance
+  - claims about performance or usefulness without evidence or mechanism
+  - examples are too vague to reuse
+  - article reads like a thought piece instead of a technical post
+  - title overpromises beyond what the article actually delivers
+  - the voice sounds like polished AI summary instead of firsthand engineering explanation
+
+tone_rules:
+  - prefer concrete explanation over broad inspiration
+  - assume the reader wants reusable detail, not hype
+  - avoid over-selling simple ideas
+  - explain enough context to orient, then get to the implementation quickly
+
+cta_rules:
+  - prefer discussion, alternatives, or implementation follow-up CTAs
+  - avoid growth-hacking style CTA language
+
+scoring_hints:
+  high_score_when:
+    - a technical reader can apply the idea after reading
+    - the article contains at least one reusable mental model or implementation pattern
+    - examples reduce confusion instead of decorating the article
+  low_score_when:
+    - the article is interesting but not actionable
+    - the structure is clean but too generic
+    - the post sounds insightful without proving anything
+
+retro_update_rules:
+  - repeated weak engagement should first trigger title clarity and implementation_usefulness review
+  - repeated positive comments but weak saves/bookmarks should trigger example_quality review
+  - repeated confusion in replies should trigger technical_clarity review

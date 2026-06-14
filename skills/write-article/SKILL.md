@@ -33,7 +33,8 @@ Use this skill for the full article production flow, especially when the user wa
 - article markdown saved to `output/`
 - title candidates
 - section structure ready for illustration insertion
-- clear handoff to `article-illustrate` and `cover-image`
+- clear handoff to `cover-image` first, then `article-illustrate`
+- optional handoff to `repurpose-content` for platform-native rewrites after the mother draft is complete
 - a completed or refined article brief when needed for downstream editing
 - a stable relationship between the draft and `output/briefs/{slug}-brief.yaml` when brief-first workflow is used
 - article drafts should prefer `output/wechat/{slug}-article.md` when a stable family slug is available
@@ -55,7 +56,17 @@ Use this skill for the full article production flow, especially when the user wa
 9. Expand the outline into the full article.
 10. Run the quality checklist before calling it complete.
 11. Save to the correct output path.
-12. Hand off to `article-illustrate` when visuals are needed.
+12. Generate the article cover via `cover-image` using the same slug family and the approved cover title.
+13. Hand off to `article-illustrate` when visuals are needed.
+
+## Post-Draft Order
+
+For WeChat article production, keep the generation order fixed:
+
+1. Confirm topic and article angle.
+2. Generate the article draft.
+3. Generate the cover image.
+4. Prompt for illustration generation.
 
 ## When to Trigger `last30days`
 

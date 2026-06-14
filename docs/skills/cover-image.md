@@ -20,7 +20,7 @@ Generate a polished article cover image aligned with the package's article workf
 
 - article path or slug
 - optional explicit title
-- reference image path
+- reference image path (defaults to `img/20260423-140003.jpg` if not provided)
 - style: 10 composition styles (see below)
 
 ## Outputs

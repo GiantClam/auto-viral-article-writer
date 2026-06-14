@@ -1,0 +1,63 @@
+platform: tiktok
+goal: earn attention in the first 3 seconds, keep retention high, and deliver one clear idea in spoken form
+audience:
+  - short-form content viewers
+  - creators
+  - founders
+  - operators
+  - AI-curious professionals
+
+dimensions:
+  - key: first_3s_hook
+    description: the opening instantly creates curiosity, tension, or payoff expectation
+  - key: spoken_rhythm
+    description: the script sounds natural when spoken aloud and moves cleanly beat by beat
+  - key: clarity_of_one_idea
+    description: the video stays focused on one core idea instead of stacking too many points
+  - key: retention_potential
+    description: each beat gives the viewer a reason to keep watching
+  - key: visual_promptability
+    description: the script suggests obvious scenes, cuts, or overlays without overexplaining them
+  - key: payoff_strength
+    description: the video lands a useful, surprising, or emotionally satisfying ending
+
+strong_signals:
+  - the first sentence feels impossible to ignore
+  - the script is easy to say out loud without stiffness
+  - one screen or beat carries one idea
+  - there is a clear progression from hook to proof to payoff
+  - useful or surprising information arrives early
+  - the ending leaves the viewer with a memorable takeaway
+
+risk_signals:
+  - slow setup before the point appears
+  - blog-like wording that sounds written rather than spoken
+  - too many ideas in one short video
+  - useful point arrives too late
+  - no clear visual rhythm or edit logic
+  - ending feels flat or obvious
+
+tone_rules:
+  - prefer spoken, punchy, low-friction language
+  - avoid long setup, throat-clearing, or abstract framing
+  - keep the script human and conversational, not like a written article
+  - avoid trying to sound profound if the real value is clarity or practicality
+
+cta_rules:
+  - prefer low-friction CTAs such as follow for part 2, save this, or tell me if you want the template
+  - CTA should come after the payoff, not before it
+
+scoring_hints:
+  high_score_when:
+    - the first 3 seconds clearly create curiosity
+    - the script can be spoken in one take without sounding awkward
+    - the ending gives the viewer a clear reason to save or share
+  low_score_when:
+    - the script reads like a WeChat paragraph pasted into video form
+    - the point is technically useful but too slow for short-form attention
+    - the hook is weaker than the body
+
+retro_update_rules:
+  - repeated weak early drop-off should first trigger first_3s_hook review
+  - repeated strong starts but weak completion should trigger retention_potential review
+  - repeated strong watch time but weak shares or saves should trigger payoff_strength review

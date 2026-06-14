@@ -1,0 +1,62 @@
+platform: facebook
+goal: make the content easy to read, comment on, and share in a social feed without sounding like a blog or a sales page
+audience:
+  - friends and peers
+  - professional network contacts
+  - community readers
+  - casual followers
+
+dimensions:
+  - key: readability
+    description: the post is easy to read in a social feed and does not feel dense or intimidating
+  - key: social_tone
+    description: the voice feels conversational and human, suitable for a social network
+  - key: commentability
+    description: the post naturally invites reactions, opinions, or follow-up questions
+  - key: shareability
+    description: the content is easy to share because it feels useful, relatable, or interesting
+  - key: clarity
+    description: the main point is easy to understand without needing a long setup
+  - key: platform_fit
+    description: the content feels native to Facebook rather than copied from a newsletter or article
+
+strong_signals:
+  - short enough to read comfortably in feed context
+  - a clear point or personal observation appears early
+  - the post feels like a real update or reflection, not a polished campaign asset
+  - easy to react to or comment on
+  - appropriate balance of context and brevity
+  - the call to action is soft and natural
+
+risk_signals:
+  - reads like a blog paragraph pasted into a feed
+  - too formal or too technical for the platform context
+  - no obvious reason for anyone to respond
+  - tone feels promotional or self-congratulatory
+  - the core idea is buried under too much explanation
+  - the post is too long for social scrolling behavior
+
+tone_rules:
+  - keep it conversational and low-friction
+  - prefer personal observation, practical takeaway, or simple framing
+  - avoid sounding like a press release or long-form essay
+  - do not over-edit away the human voice
+
+cta_rules:
+  - prefer light discussion prompts or simple sharing prompts
+  - avoid hard-sell conversion language
+
+scoring_hints:
+  high_score_when:
+    - the post is easy to consume in the feed
+    - the reader can react without needing extra context
+    - the message feels human and shareable
+  low_score_when:
+    - the post feels too formal or too long
+    - the content is useful but not socially inviting
+    - the wording sounds imported from another platform
+
+retro_update_rules:
+  - repeated weak comments should first trigger commentability review
+  - repeated weak shares should first trigger shareability review
+  - repeated high engagement but low readability should trigger readability review

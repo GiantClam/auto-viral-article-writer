@@ -1,0 +1,63 @@
+platform: x
+goal: compress one sharp idea into a high-clarity, repostable, discussion-worthy post or thread
+audience:
+  - builders
+  - founders
+  - developers
+  - operators
+  - AI-native readers
+
+dimensions:
+  - key: first_line_sharpness
+    description: the first line makes the reader stop and want the second line
+  - key: point_density
+    description: each line carries signal and avoids padding
+  - key: repost_potential
+    description: the post contains a takeaway worth quoting or forwarding
+  - key: discussion_energy
+    description: the post creates productive agreement, disagreement, or reflection
+  - key: clarity
+    description: the point is easy to understand quickly without losing precision
+  - key: thread_rhythm
+    description: if written as a thread, each post advances the argument cleanly
+
+strong_signals:
+  - strong first sentence with a claim, contrast, or hard-earned lesson
+  - a clear opinion, not a vague observation
+  - quotable phrasing
+  - strong compression without losing meaning
+  - one core point carried cleanly through the whole post or thread
+  - a natural place for reply, repost, or quote-tweet behavior
+
+risk_signals:
+  - opening too soft or too explanatory
+  - thread that repeats instead of advances
+  - generic take that sounds interchangeable
+  - too much context before the actual point
+  - no line memorable enough to quote
+  - post reads like a mini blog instead of a native X post
+
+tone_rules:
+  - prefer short, confident, high-signal phrasing
+  - get to the point early
+  - avoid long throat-clearing intros
+  - avoid fake controversy if the point is actually weak
+
+cta_rules:
+  - prefer reply, repost, or disagreement-friendly CTAs
+  - avoid heavy-handed subscribe language unless the account style already uses it
+
+scoring_hints:
+  high_score_when:
+    - the first line alone creates interest
+    - at least one line feels quotable
+    - the post can be understood in one pass without confusion
+  low_score_when:
+    - the point only becomes clear after too much setup
+    - the post is informative but not shareable
+    - the language is correct but not memorable
+
+retro_update_rules:
+  - repeated weak impressions should first trigger first_line_sharpness review
+  - repeated strong impressions but weak reposts should trigger repost_potential review
+  - repeated strong engagement but confused replies should trigger clarity review

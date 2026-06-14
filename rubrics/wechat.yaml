@@ -1,0 +1,62 @@
+platform: wechat
+goal: build authority, complete an argument, and create saveable insight for professional readers
+audience:
+  - founders
+  - developers
+  - product people
+  - AI practitioners
+
+dimensions:
+  - key: title_strength
+    description: the title creates a clear promise and is worth opening
+  - key: opening_grab
+    description: the first 3-5 paragraphs establish tension, result, or judgment quickly
+  - key: structure_depth
+    description: the article has clear section rhythm and moves from claim to explanation to conclusion
+  - key: information_density
+    description: each section contains real signal, not empty transition text
+  - key: insight_strength
+    description: the piece offers a clear point of view, not just summary
+  - key: saveability
+    description: the reader feels this is worth bookmarking or forwarding internally
+
+strong_signals:
+  - result-first opening
+  - one core argument carried consistently through the whole piece
+  - section headings that are useful even when skimmed
+  - concrete examples supporting claims
+  - practical takeaways near the end
+  - language that sounds informed rather than generic
+
+risk_signals:
+  - title is accurate but not compelling
+  - opening spends too long on background before making the point
+  - article reads like explanation without judgment
+  - sections repeat the same idea in different words
+  - ending is generic or weak
+  - the article sounds like AI summary instead of lived analysis
+
+tone_rules:
+  - prefer judgment plus explanation, not pure information dump
+  - write as if explaining a hard-earned conclusion to smart readers
+  - avoid inflated hype unless the article is intentionally written as a hype piece
+  - avoid empty authority language such as revolution, disruptive, or game-changing unless proved in the body
+
+cta_rules:
+  - CTA should feel natural and low-friction
+  - prefer invitation to discuss, save, or share over aggressive conversion asks
+
+scoring_hints:
+  high_score_when:
+    - title and opening make the reader want to keep going immediately
+    - the article says something specific and memorable
+    - the reader can retell the main insight in one sentence
+  low_score_when:
+    - the article is correct but boring
+    - the point appears too late
+    - the conclusion adds no new value
+
+retro_update_rules:
+  - repeated weak read-through should first trigger title and opening review
+  - repeated strong read-through but weak sharing should trigger saveability and forwarding-angle review
+  - repeated strong opens with weak completion should trigger structure_depth review

@@ -12,6 +12,7 @@ See `docs/overview/slug-rules.md` for how the slug itself should be generated an
 
 - brief: `output/briefs/{slug}-brief.yaml`
 - article draft: `output/wechat/{slug}-article.md`
+- content ledger folder: `output/content/{slug}/`
 - cover image: `output/images/wechat/{slug}-cover-final.png`
 - inline images: `output/images/wechat/{slug}-01.png`, `output/images/wechat/{slug}-02.png`, `output/images/wechat/{slug}-03.png`
 

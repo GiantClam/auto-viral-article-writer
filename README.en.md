@@ -1,14 +1,14 @@
 # Auto Viral Article Writer
 
-AI content creation skill package for agents: hot topics -> viral patterns -> article drafting -> illustrations -> cover image.
+AI content production and distribution skill package for agents: hot topics -> viral patterns -> article drafting -> multi-platform repurposing -> score/predict/retro -> illustrations and cover image.
 
 ![License](https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge)
-![Skills](https://img.shields.io/badge/Skills-12-10B981?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-16-10B981?style=for-the-badge)
 ![Platforms](https://img.shields.io/badge/Platforms-5-F59E0B?style=for-the-badge)
 
 **Supported Platforms:** OpenCode, Codex, Claude Code, OpenClaw, Hermes
 
-This repository packages a repeatable content workflow as installable skills. It is meant for people who want an agent to discover timely topics, reuse proven viral structures, draft long-form articles, and generate matching visuals with predictable local outputs.
+This repository packages a repeatable content workflow as installable skills. It is meant for people who want an agent to discover timely topics, reuse proven viral structures, draft long-form articles, repurpose them for multiple platforms, and generate matching visuals with predictable local outputs.
 
 ---
 
@@ -17,6 +17,8 @@ This repository packages a repeatable content workflow as installable skills. It
 - Finds current topics across Chinese and global sources
 - Reuses proven viral structures instead of starting from zero every time
 - Produces article drafts with a stable markdown format
+- Repurposes one mother draft into multiple native platform formats
+- Adds pre-publish scoring, blind prediction, and post-publish retrospectives
 - Generates illustrations and cover images through the same toolchain
 - Keeps the workflow portable across multiple agent platforms
 
@@ -46,6 +48,10 @@ This repository packages a repeatable content workflow as installable skills. It
 | `viral-patterns` | Retrieves reusable title and structure patterns from ViralKB | `viral patterns`, `find title formulas`, `check article structure` |
 | `viral-mining` | Discovers and ingests high-signal content into ViralKB | `viral mining`, `discover viral content` |
 | `write-article` | Runs the full article workflow from research to draft | `write article`, `create article`, `公众号文章` |
+| `repurpose-content` | Rewrites one mother draft into native platform variants | `rewrite this for X`, `turn this into Xiaohongshu`, `repurpose this article` |
+| `article-score-retro` | Handles pre-publish scoring, blind prediction, and post-publish retrospective | `score this post`, `predict this`, `retro this post` |
+| `platform-rubric-manager` | Maintains one scoring rubric per platform and updates it from repeated retro signals | `update wechat rubric`, `review x rubric` |
+| `multi-platform-content` | Orchestrates mother draft, repurposing, scoring, prediction, and retro as one workflow | `run the multi-platform workflow`, `build a multi-platform content package` |
 | `article-audit` | Audits whether one article family is complete and consistently named | `article audit`, `publish ready`, `check this article family` |
 | `article-illustrate` | Inserts illustrations into an existing article | `illustrate article`, `insert images` |
 | `cover-image` | Creates article cover images | `create cover`, `cover image` |
@@ -67,8 +73,11 @@ setup
   -> research-brief
   -> viral-patterns
   -> write-article
+       -> cover-image
+       -> repurpose-content
+            -> article-score-retro
+                 -> platform-rubric-manager
        -> article-illustrate
-  -> cover-image
 ```
 
 Expected outputs:
@@ -78,6 +87,7 @@ Expected outputs:
 - structured article briefs under `output/briefs/`
 - local ViralKB pattern lookups
 - markdown drafts such as `output/wechat/{slug}-article.md`
+- content ledger folders such as `output/content/{slug}/`
 - inline images such as `output/images/wechat/{slug}-01.png`
 - final cover images such as `output/images/wechat/{slug}-cover-final.png`
 - auditable article artifact family status
@@ -211,4 +221,6 @@ Additional notes:
 
 ### Cover image reference missing
 
-`cover-image` expects a user-provided `--ref` portrait or reference image path.
+`cover-image` supports a default portrait reference image at `img/20260423-140003.jpg` when the user does not provide one.
+
+If you want a different face identity, provide an explicit `--ref` path.
