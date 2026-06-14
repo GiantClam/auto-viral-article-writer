@@ -61,6 +61,7 @@ docs/skills/research-brief.md
 docs/skills/viral-patterns.md
 docs/skills/viral-mining.md
 docs/skills/write-article.md
+docs/skills/last30days.md
 docs/skills/repurpose-content.md
 docs/skills/article-score-retro.md
 docs/skills/platform-rubric-manager.md

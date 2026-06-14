@@ -164,6 +164,18 @@ python tools/opencli_fetcher.py --check
 - OpenClaw
 - Hermes
 
+### last30days 说明
+
+`skills/last30days/` 作为 Git submodule 引入，上游仓库是：
+
+`https://github.com/mvanhorn/last30days-skill.git`
+
+首次克隆本仓库后，如果你需要这个 skill，请运行：
+
+```bash
+git submodule update --init --recursive
+```
+
 ---
 
 ## 仓库结构

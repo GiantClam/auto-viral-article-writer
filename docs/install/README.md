@@ -5,10 +5,23 @@ This package can be installed in multiple agent environments. The exact skill di
 ## Shared Requirements
 
 1. Copy or clone `skill-packaging/` into a workspace-accessible location.
-2. Install Python dependencies.
-3. Configure `config/.env`.
-4. Ensure the agent can read the `skills/` directory.
-5. Create output paths including `output/briefs/` if you want reusable brief artifacts.
+2. If you need bundled dependencies such as `skills/last30days/`, initialize submodules.
+3. Install Python dependencies.
+4. Configure `config/.env`.
+5. Ensure the agent can read the `skills/` directory.
+6. Create output paths including `output/briefs/` if you want reusable brief artifacts.
+
+## Submodule Initialization
+
+If you cloned the repository fresh, initialize bundled submodules before installation:
+
+```bash
+git submodule update --init --recursive
+```
+
+Current submodule:
+
+- `skills/last30days/` → `https://github.com/mvanhorn/last30days-skill.git`
 
 ## OpenCode
 

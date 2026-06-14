@@ -154,6 +154,18 @@ See `docs/install/README.md` for platform-specific guidance for:
 - OpenClaw
 - Hermes
 
+### last30days Note
+
+`skills/last30days/` is included as a Git submodule from:
+
+`https://github.com/mvanhorn/last30days-skill.git`
+
+If you need that skill after cloning this repository, run:
+
+```bash
+git submodule update --init --recursive
+```
+
 ---
 
 ## Repository Structure
