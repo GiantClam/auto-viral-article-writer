@@ -6,10 +6,10 @@ and ingests qualifying items into ViralKB — without re-running full multi-plat
 viral-mining searches.
 """
 
+from datetime import datetime, timezone
 import json
 import re
 from pathlib import Path
-from datetime import datetime, timezone
 from typing import Dict, List
 
 EMOTIONAL_WORDS = [
@@ -84,6 +84,68 @@ def _categorize(title: str) -> List[str]:
     return tags or ["AI工具"]
 
 
+def _coerce_int(value) -> int:
+    if isinstance(value, bool) or value is None:
+        return 0
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        return int(value)
+    if isinstance(value, str):
+        try:
+            return int(float(value.replace(",", "").strip()))
+        except ValueError:
+            return 0
+    return 0
+
+
+def _first_string(item: dict, keys: List[str]) -> str:
+    for key in keys:
+        value = item.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return ""
+
+
+def _normalize_source_item(item: dict) -> dict:
+    title = _first_string(item, ["title", "text", "tweet_text", "full_text", "content"])
+    url = _first_string(item, ["url", "tweet_url", "tweetUrl", "permalink"])
+    source = _first_string(item, ["source", "platform"])
+
+    if not source and (
+        "tweet_id" in item
+        or "tweetId" in item
+        or "author_handle" in item
+        or "authorHandle" in item
+    ):
+        source = "TweetClaw"
+
+    score = _coerce_int(item.get("score"))
+    if score == 0:
+        score = sum(
+            _coerce_int(item.get(key))
+            for key in [
+                "likeCount",
+                "likes",
+                "retweetCount",
+                "repostCount",
+                "retweets",
+                "replies",
+                "replyCount",
+                "quoteCount",
+                "quotes",
+            ]
+        )
+
+    return {
+        **item,
+        "title": title or "Untitled",
+        "url": url,
+        "source": source or "unknown",
+        "score": score,
+    }
+
+
 def ingest_hot_topics(
     source_files: List[str],
     kb_dir: str,
@@ -122,6 +184,9 @@ def ingest_hot_topics(
             items = [items]
 
         for item in items:
+            if not isinstance(item, dict):
+                continue
+            item = _normalize_source_item(item)
             total += 1
             score = item.get("score", 0)
             if score < min_score:

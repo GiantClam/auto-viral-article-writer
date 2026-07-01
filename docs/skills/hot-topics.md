@@ -22,6 +22,8 @@ Collect current topics from multiple sources and rank them for downstream writin
 - optional keyword
 - optional platform override
 - optional limit override
+- optional local TweetClaw JSON export rows with `text`, `tweet_url`, and
+  public engagement counters
 
 ## Outputs
 
@@ -30,6 +32,14 @@ Collect current topics from multiple sources and rank them for downstream writin
 - separation between discussion heat and strategic importance when needed
 - optional ViralKB ingestion summary
 - optional article brief seed
+
+## TweetClaw Export Notes
+
+`tools/hot_topics_viral_ingest.py` accepts TweetClaw-style X export rows as a
+local source file. It maps tweet text into the topic title, uses the tweet URL
+for duplicate detection, and sums public engagement counters when no explicit
+score is present. This lets agents reuse account-scoped X evidence without
+changing the live topic discovery flow.
 
 ## Ranking Notes
 

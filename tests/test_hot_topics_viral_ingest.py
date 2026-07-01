@@ -45,3 +45,34 @@ def test_skips_duplicate_urls(tmp_path):
 
     assert result["ingested"] == 1
     assert result["skipped_duplicates"] == 1
+
+
+def test_ingests_tweetclaw_export_rows(tmp_path):
+    source = tmp_path / "tweetclaw.json"
+    source.write_text(
+        json.dumps(
+            [
+                {
+                    "tweet_id": "1870000000000000000",
+                    "text": "AI launch posts with public benchmarks are outperforming generic teasers",
+                    "tweet_url": "https://x.com/founder/status/1870000000000000000",
+                    "author_handle": "founder",
+                    "likeCount": 80,
+                    "retweetCount": 12,
+                    "replyCount": 8,
+                    "quoteCount": 5,
+                }
+            ],
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    kb_dir = tmp_path / "kb"
+    result = ingest_hot_topics([str(source)], str(kb_dir), min_score=50)
+
+    records = [json.loads(line) for line in (kb_dir / "patterns.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert result["ingested"] == 1
+    assert records[0]["title"].startswith("AI launch posts")
+    assert records[0]["platform"] == "TweetClaw"
+    assert records[0]["engagement"] == 105
